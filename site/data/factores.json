@@ -1,0 +1,82 @@
+[
+ {
+  "id": "diesel",
+  "nombre": "Diésel (flota y equipos)",
+  "alcance": 1,
+  "categoria": "Combustión móvil",
+  "unidad": "L",
+  "factor_kgco2e": 2.68,
+  "fuente": "IPCC 2006 Vol.2: 74.100 kgCO2/TJ; PCI 43,0 MJ/kg; densidad 0,84 kg/L. Solo CO2.",
+  "estado": "referencial"
+ },
+ {
+  "id": "gasolina",
+  "nombre": "Gasolina (vehículos livianos)",
+  "alcance": 1,
+  "categoria": "Combustión móvil",
+  "unidad": "L",
+  "factor_kgco2e": 2.27,
+  "fuente": "IPCC 2006 Vol.2: 69.300 kgCO2/TJ; PCI 44,3 MJ/kg; densidad 0,74 kg/L. Solo CO2.",
+  "estado": "referencial"
+ },
+ {
+  "id": "glp",
+  "nombre": "Gas licuado (GLP)",
+  "alcance": 1,
+  "categoria": "Combustión estacionaria",
+  "unidad": "kg",
+  "factor_kgco2e": 2.98,
+  "fuente": "IPCC 2006 Vol.2: 63.100 kgCO2/TJ; PCI 47,3 MJ/kg. Solo CO2.",
+  "estado": "referencial"
+ },
+ {
+  "id": "gas_natural",
+  "nombre": "Gas natural",
+  "alcance": 1,
+  "categoria": "Combustión estacionaria",
+  "unidad": "m3",
+  "factor_kgco2e": 2.02,
+  "fuente": "IPCC 2006 Vol.2: 56.100 kgCO2/TJ; supuesto 36 MJ/m3. Solo CO2.",
+  "estado": "referencial"
+ },
+ {
+  "id": "refrigerante_r410a",
+  "nombre": "Fuga de refrigerante R-410A",
+  "alcance": 1,
+  "categoria": "Emisiones fugitivas",
+  "unidad": "kg",
+  "factor_kgco2e": 2088.0,
+  "fuente": "PCG100 del R-410A según IPCC AR4/AR5.",
+  "estado": "referencial"
+ },
+ {
+  "id": "electricidad_sen",
+  "nombre": "Electricidad de la red (SEN)",
+  "alcance": 2,
+  "categoria": "Electricidad comprada",
+  "unidad": "kWh",
+  "factor_kgco2e": 0.3,
+  "fuente": "VALOR DE DEMO. Reemplazar por el promedio anual del dataset 'Factor de Emisión - Promedio Mensual' (CNE, Energía Abierta).",
+  "estado": "reemplazar"
+ },
+ {
+  "id": "vuelos_nacionales",
+  "nombre": "Vuelos nacionales",
+  "alcance": 3,
+  "categoria": "Viajes de negocio",
+  "unidad": "pasajero-km",
+  "factor_kgco2e": 0.25,
+  "fuente": "Orden de magnitud de factores DEFRA/DESNZ para vuelos domésticos, con forzamiento radiativo. Verificar versión vigente.",
+  "estado": "referencial"
+ },
+ {
+  "id": "residuos_relleno",
+  "nombre": "Residuos a relleno sanitario",
+  "alcance": 3,
+  "categoria": "Residuos generados",
+  "unidad": "t",
+  "factor_kgco2e": 470.0,
+  "fuente": "Orden de magnitud de factores DEFRA/DESNZ para residuos comerciales a relleno. Verificar versión vigente.",
+  "estado": "referencial"
+ }
+]

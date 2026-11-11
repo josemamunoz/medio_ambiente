@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sustentabilidad Chile</title>
+  <meta name="description" content="Dashboards de sustentabilidad para Chile: huella de carbono corporativa y observatorio de emisiones del RETC.">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="marca" href="index.html">Sustentabilidad Chile</a>
+    <nav>
+      <a href="index.html" aria-current="page">Inicio</a>
+      <a href="huella.html">Huella de carbono</a>
+      <a href="observatorio.html">Observatorio RETC</a>
+    </nav>
+    <button class="boton-tema" type="button">Modo oscuro</button>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Datos de sustentabilidad listos para decidir</h1>
+      <p class="subtitulo">
+        Dashboards de huella de carbono y emisiones para empresas en Chile, construidos con Python y HTML.
+        Se publican en la web sin licencias de BI, se actualizan solos y se adaptan a cada cliente.
+      </p>
+    </section>
+
+    <section class="tarjetas-modulo">
+      <a href="huella.html">
+        <article class="tarjeta">
+          <h2>Huella de carbono corporativa →</h2>
+          <p>Alcances 1, 2 y 3 según el GHG Protocol, por mes, sede y fuente. Puedes cargar tu propio archivo de consumos y verlo al instante.</p>
+        </article>
+      </a>
+      <a href="observatorio.html">
+        <article class="tarjeta">
+          <h2>Observatorio de emisiones RETC →</h2>
+          <p>Emisiones de CO₂ declaradas por la industria chilena: evolución, regiones, rubros y principales establecimientos.</p>
+        </article>
+      </a>
+    </section>
+
+    <section class="tarjeta">
+      <h2>¿Para quién es esto?</h2>
+      <ul class="lista">
+        <li><strong>Proveedores de la minería</strong> a los que sus clientes les piden informar su huella de carbono.</li>
+        <li><strong>Empresas que reportan a la CMF</strong> (NCG 461) y necesitan indicadores de sostenibilidad trazables.</li>
+        <li><strong>Pymes que postulan a HuellaChile</strong> y quieren medir y mostrar su reducción de emisiones.</li>
+      </ul>
+      <h2 style="margin-top: 16px">Cómo funciona</h2>
+      <ul class="lista">
+        <li>Un pipeline en Python descarga datos públicos (RETC, datos.gob.cl), los limpia y calcula los indicadores.</li>
+        <li>El sitio es HTML estático con gráficos interactivos, publicado gratis en GitHub Pages.</li>
+        <li>Un GitHub Action actualiza los datos todos los meses, sin intervención manual.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>Proyecto de portafolio · Python + HTML, sin licencias de BI</footer>
+  <script src="assets/js/comun.js"></script>
+</body>
+</html>

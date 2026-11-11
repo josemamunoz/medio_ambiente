@@ -1,0 +1,58 @@
+name: Actualizar datos y publicar sitio
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "17 9 3 * *"   # día 3 de cada mes
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Tests
+        run: pytest -q
+      - name: Datos de la huella (factores + demo)
+        run: python -m pipeline.build
+      - name: Caché de archivos del RETC
+        uses: actions/cache@v4
+        with:
+          path: data/raw/retc
+          key: retc-v1-${{ github.run_id }}
+          restore-keys: retc-v1-
+      - name: Observatorio RETC (descarga desde datos.gob.cl)
+        # En main, si el portal del Estado falla, el sitio se publica igual sin esta sección.
+        # En un PR debe funcionar, para detectar cambios de formato del RETC antes de unir.
+        continue-on-error: ${{ github.event_name != 'pull_request' }}
+        run: python -m pipeline.observatorio
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

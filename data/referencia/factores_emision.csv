@@ -1,0 +1,9 @@
+id,nombre,alcance,categoria,unidad,factor_kgco2e,fuente,estado
+diesel,Diésel (flota y equipos),1,Combustión móvil,L,2.68,"IPCC 2006 Vol.2: 74.100 kgCO2/TJ; PCI 43,0 MJ/kg; densidad 0,84 kg/L. Solo CO2.",referencial
+gasolina,Gasolina (vehículos livianos),1,Combustión móvil,L,2.27,"IPCC 2006 Vol.2: 69.300 kgCO2/TJ; PCI 44,3 MJ/kg; densidad 0,74 kg/L. Solo CO2.",referencial
+glp,Gas licuado (GLP),1,Combustión estacionaria,kg,2.98,"IPCC 2006 Vol.2: 63.100 kgCO2/TJ; PCI 47,3 MJ/kg. Solo CO2.",referencial
+gas_natural,Gas natural,1,Combustión estacionaria,m3,2.02,"IPCC 2006 Vol.2: 56.100 kgCO2/TJ; supuesto 36 MJ/m3. Solo CO2.",referencial
+refrigerante_r410a,Fuga de refrigerante R-410A,1,Emisiones fugitivas,kg,2088,"PCG100 del R-410A según IPCC AR4/AR5.",referencial
+electricidad_sen,Electricidad de la red (SEN),2,Electricidad comprada,kWh,0.30,"VALOR DE DEMO. Reemplazar por el promedio anual del dataset 'Factor de Emisión - Promedio Mensual' (CNE, Energía Abierta).",reemplazar
+vuelos_nacionales,Vuelos nacionales,3,Viajes de negocio,pasajero-km,0.25,"Orden de magnitud de factores DEFRA/DESNZ para vuelos domésticos, con forzamiento radiativo. Verificar versión vigente.",referencial
+residuos_relleno,Residuos a relleno sanitario,3,Residuos generados,t,470,"Orden de magnitud de factores DEFRA/DESNZ para residuos comerciales a relleno. Verificar versión vigente.",referencial

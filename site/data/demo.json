@@ -1,0 +1,1967 @@
+{
+ "empresa": "Proveedor Minero Demo SpA (empresa ficticia)",
+ "consumos": [
+  {
+   "fecha": "2023-01",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 16200.8
+  },
+  {
+   "fecha": "2023-01",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 37924.12
+  },
+  {
+   "fecha": "2023-01",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 2087.28
+  },
+  {
+   "fecha": "2023-01",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 243.27
+  },
+  {
+   "fecha": "2023-01",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 6.07
+  },
+  {
+   "fecha": "2023-01",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 20474.1
+  },
+  {
+   "fecha": "2023-01",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 6832.16
+  },
+  {
+   "fecha": "2023-01",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 15010.13
+  },
+  {
+   "fecha": "2023-01",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.6
+  },
+  {
+   "fecha": "2023-02",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 16522.42
+  },
+  {
+   "fecha": "2023-02",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 39127.57
+  },
+  {
+   "fecha": "2023-02",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 2173.67
+  },
+  {
+   "fecha": "2023-02",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 256.93
+  },
+  {
+   "fecha": "2023-02",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 6.04
+  },
+  {
+   "fecha": "2023-02",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 20850.98
+  },
+  {
+   "fecha": "2023-02",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 6961.32
+  },
+  {
+   "fecha": "2023-02",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 14412.99
+  },
+  {
+   "fecha": "2023-02",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.62
+  },
+  {
+   "fecha": "2023-03",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 16679.08
+  },
+  {
+   "fecha": "2023-03",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 42760.57
+  },
+  {
+   "fecha": "2023-03",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 2084.32
+  },
+  {
+   "fecha": "2023-03",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 305.86
+  },
+  {
+   "fecha": "2023-03",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 6.38
+  },
+  {
+   "fecha": "2023-03",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 25816.99
+  },
+  {
+   "fecha": "2023-03",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 6892.99
+  },
+  {
+   "fecha": "2023-03",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 14007.9
+  },
+  {
+   "fecha": "2023-03",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.51
+  },
+  {
+   "fecha": "2023-04",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 17000.67
+  },
+  {
+   "fecha": "2023-04",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 43791.5
+  },
+  {
+   "fecha": "2023-04",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 2173.56
+  },
+  {
+   "fecha": "2023-04",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 357.28
+  },
+  {
+   "fecha": "2023-04",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 6.25
+  },
+  {
+   "fecha": "2023-04",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 27965.53
+  },
+  {
+   "fecha": "2023-04",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 6956.18
+  },
+  {
+   "fecha": "2023-04",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 14542.65
+  },
+  {
+   "fecha": "2023-04",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.93
+  },
+  {
+   "fecha": "2023-05",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 18047.62
+  },
+  {
+   "fecha": "2023-05",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 43953.77
+  },
+  {
+   "fecha": "2023-05",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 2242.08
+  },
+  {
+   "fecha": "2023-05",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 385.86
+  },
+  {
+   "fecha": "2023-05",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 6.39
+  },
+  {
+   "fecha": "2023-05",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 32933.74
+  },
+  {
+   "fecha": "2023-05",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 7616.66
+  },
+  {
+   "fecha": "2023-05",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 16229.45
+  },
+  {
+   "fecha": "2023-05",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.92
+  },
+  {
+   "fecha": "2023-06",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 18141.67
+  },
+  {
+   "fecha": "2023-06",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 45335.16
+  },
+  {
+   "fecha": "2023-06",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 2272.1
+  },
+  {
+   "fecha": "2023-06",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 439.54
+  },
+  {
+   "fecha": "2023-06",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 6.5
+  },
+  {
+   "fecha": "2023-06",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 34362.7
+  },
+  {
+   "fecha": "2023-06",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 7544.92
+  },
+  {
+   "fecha": "2023-06",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 15943.35
+  },
+  {
+   "fecha": "2023-06",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.95
+  },
+  {
+   "fecha": "2023-07",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 19037.18
+  },
+  {
+   "fecha": "2023-07",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 46233.6
+  },
+  {
+   "fecha": "2023-07",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 2163.6
+  },
+  {
+   "fecha": "2023-07",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 455.64
+  },
+  {
+   "fecha": "2023-07",
+   "sede": "Antofagasta",
+   "fuente": "refrigerante_r410a",
+   "cantidad": 4.0
+  },
+  {
+   "fecha": "2023-07",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 6.78
+  },
+  {
+   "fecha": "2023-07",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 34366.43
+  },
+  {
+   "fecha": "2023-07",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 7375.9
+  },
+  {
+   "fecha": "2023-07",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 16015.19
+  },
+  {
+   "fecha": "2023-07",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.93
+  },
+  {
+   "fecha": "2023-08",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 19629.03
+  },
+  {
+   "fecha": "2023-08",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 49294.06
+  },
+  {
+   "fecha": "2023-08",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 2261.71
+  },
+  {
+   "fecha": "2023-08",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 422.33
+  },
+  {
+   "fecha": "2023-08",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 6.55
+  },
+  {
+   "fecha": "2023-08",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 34007.65
+  },
+  {
+   "fecha": "2023-08",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 7940.65
+  },
+  {
+   "fecha": "2023-08",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 15887.65
+  },
+  {
+   "fecha": "2023-08",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.83
+  },
+  {
+   "fecha": "2023-09",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 17526.07
+  },
+  {
+   "fecha": "2023-09",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 44632.71
+  },
+  {
+   "fecha": "2023-09",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 2329.77
+  },
+  {
+   "fecha": "2023-09",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 406.68
+  },
+  {
+   "fecha": "2023-09",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 6.31
+  },
+  {
+   "fecha": "2023-09",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 31203.34
+  },
+  {
+   "fecha": "2023-09",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 7519.27
+  },
+  {
+   "fecha": "2023-09",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 15705.07
+  },
+  {
+   "fecha": "2023-09",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.78
+  },
+  {
+   "fecha": "2023-10",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 16489.16
+  },
+  {
+   "fecha": "2023-10",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 43343.19
+  },
+  {
+   "fecha": "2023-10",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 2017.24
+  },
+  {
+   "fecha": "2023-10",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 337.99
+  },
+  {
+   "fecha": "2023-10",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 5.87
+  },
+  {
+   "fecha": "2023-10",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 28428.01
+  },
+  {
+   "fecha": "2023-10",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 7334.31
+  },
+  {
+   "fecha": "2023-10",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 15830.33
+  },
+  {
+   "fecha": "2023-10",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.65
+  },
+  {
+   "fecha": "2023-11",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 16264.71
+  },
+  {
+   "fecha": "2023-11",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 42923.1
+  },
+  {
+   "fecha": "2023-11",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 2163.13
+  },
+  {
+   "fecha": "2023-11",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 309.07
+  },
+  {
+   "fecha": "2023-11",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 5.48
+  },
+  {
+   "fecha": "2023-11",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 24533.78
+  },
+  {
+   "fecha": "2023-11",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 6625.73
+  },
+  {
+   "fecha": "2023-11",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 15321.03
+  },
+  {
+   "fecha": "2023-11",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.57
+  },
+  {
+   "fecha": "2023-12",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 15448.76
+  },
+  {
+   "fecha": "2023-12",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 41035.65
+  },
+  {
+   "fecha": "2023-12",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 2056.56
+  },
+  {
+   "fecha": "2023-12",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 261.06
+  },
+  {
+   "fecha": "2023-12",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 5.86
+  },
+  {
+   "fecha": "2023-12",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 22071.68
+  },
+  {
+   "fecha": "2023-12",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 6484.47
+  },
+  {
+   "fecha": "2023-12",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 14871.85
+  },
+  {
+   "fecha": "2023-12",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.54
+  },
+  {
+   "fecha": "2024-01",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 14966.84
+  },
+  {
+   "fecha": "2024-01",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 40635.18
+  },
+  {
+   "fecha": "2024-01",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 1975.28
+  },
+  {
+   "fecha": "2024-01",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 245.88
+  },
+  {
+   "fecha": "2024-01",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 5.77
+  },
+  {
+   "fecha": "2024-01",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 20238.84
+  },
+  {
+   "fecha": "2024-01",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 6293.05
+  },
+  {
+   "fecha": "2024-01",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 14065.23
+  },
+  {
+   "fecha": "2024-01",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.65
+  },
+  {
+   "fecha": "2024-02",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 14462.06
+  },
+  {
+   "fecha": "2024-02",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 39781.79
+  },
+  {
+   "fecha": "2024-02",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 2199.37
+  },
+  {
+   "fecha": "2024-02",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 252.94
+  },
+  {
+   "fecha": "2024-02",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 5.52
+  },
+  {
+   "fecha": "2024-02",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 21690.16
+  },
+  {
+   "fecha": "2024-02",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 6368.9
+  },
+  {
+   "fecha": "2024-02",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 15120.38
+  },
+  {
+   "fecha": "2024-02",
+   "sede": "Mejillones",
+   "fuente": "refrigerante_r410a",
+   "cantidad": 2.5
+  },
+  {
+   "fecha": "2024-02",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.56
+  },
+  {
+   "fecha": "2024-03",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 15496.73
+  },
+  {
+   "fecha": "2024-03",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 43136.39
+  },
+  {
+   "fecha": "2024-03",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 2133.23
+  },
+  {
+   "fecha": "2024-03",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 296.09
+  },
+  {
+   "fecha": "2024-03",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 5.73
+  },
+  {
+   "fecha": "2024-03",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 26731.48
+  },
+  {
+   "fecha": "2024-03",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 6834.78
+  },
+  {
+   "fecha": "2024-03",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 14723.81
+  },
+  {
+   "fecha": "2024-03",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.53
+  },
+  {
+   "fecha": "2024-04",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 16669.44
+  },
+  {
+   "fecha": "2024-04",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 44371.76
+  },
+  {
+   "fecha": "2024-04",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 2016.22
+  },
+  {
+   "fecha": "2024-04",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 322.03
+  },
+  {
+   "fecha": "2024-04",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 5.88
+  },
+  {
+   "fecha": "2024-04",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 27931.12
+  },
+  {
+   "fecha": "2024-04",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 6813.91
+  },
+  {
+   "fecha": "2024-04",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 16245.6
+  },
+  {
+   "fecha": "2024-04",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.53
+  },
+  {
+   "fecha": "2024-05",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 16002.07
+  },
+  {
+   "fecha": "2024-05",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 49410.95
+  },
+  {
+   "fecha": "2024-05",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 2171.71
+  },
+  {
+   "fecha": "2024-05",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 384.28
+  },
+  {
+   "fecha": "2024-05",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 5.98
+  },
+  {
+   "fecha": "2024-05",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 30979.09
+  },
+  {
+   "fecha": "2024-05",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 7388.13
+  },
+  {
+   "fecha": "2024-05",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 15179.94
+  },
+  {
+   "fecha": "2024-05",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.58
+  },
+  {
+   "fecha": "2024-06",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 17061.59
+  },
+  {
+   "fecha": "2024-06",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 50048.51
+  },
+  {
+   "fecha": "2024-06",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 2249.04
+  },
+  {
+   "fecha": "2024-06",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 447.33
+  },
+  {
+   "fecha": "2024-06",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 6.06
+  },
+  {
+   "fecha": "2024-06",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 35503.96
+  },
+  {
+   "fecha": "2024-06",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 7558.88
+  },
+  {
+   "fecha": "2024-06",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 16228.92
+  },
+  {
+   "fecha": "2024-06",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.85
+  },
+  {
+   "fecha": "2024-07",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 16143.43
+  },
+  {
+   "fecha": "2024-07",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 49455.23
+  },
+  {
+   "fecha": "2024-07",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 2190.17
+  },
+  {
+   "fecha": "2024-07",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 416.26
+  },
+  {
+   "fecha": "2024-07",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 5.72
+  },
+  {
+   "fecha": "2024-07",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 38084.81
+  },
+  {
+   "fecha": "2024-07",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 8107.72
+  },
+  {
+   "fecha": "2024-07",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 16459.19
+  },
+  {
+   "fecha": "2024-07",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.73
+  },
+  {
+   "fecha": "2024-08",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 16255.76
+  },
+  {
+   "fecha": "2024-08",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 50567.05
+  },
+  {
+   "fecha": "2024-08",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 2246.94
+  },
+  {
+   "fecha": "2024-08",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 455.86
+  },
+  {
+   "fecha": "2024-08",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 6.09
+  },
+  {
+   "fecha": "2024-08",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 33102.9
+  },
+  {
+   "fecha": "2024-08",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 6982.12
+  },
+  {
+   "fecha": "2024-08",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 15530.42
+  },
+  {
+   "fecha": "2024-08",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.66
+  },
+  {
+   "fecha": "2024-09",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 15236.11
+  },
+  {
+   "fecha": "2024-09",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 47480.41
+  },
+  {
+   "fecha": "2024-09",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 2137.68
+  },
+  {
+   "fecha": "2024-09",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 374.39
+  },
+  {
+   "fecha": "2024-09",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 5.31
+  },
+  {
+   "fecha": "2024-09",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 32285.43
+  },
+  {
+   "fecha": "2024-09",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 7415.22
+  },
+  {
+   "fecha": "2024-09",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 17263.9
+  },
+  {
+   "fecha": "2024-09",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.55
+  },
+  {
+   "fecha": "2024-10",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 15409.83
+  },
+  {
+   "fecha": "2024-10",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 48466.06
+  },
+  {
+   "fecha": "2024-10",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 2141.47
+  },
+  {
+   "fecha": "2024-10",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 360.59
+  },
+  {
+   "fecha": "2024-10",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 5.59
+  },
+  {
+   "fecha": "2024-10",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 28254.48
+  },
+  {
+   "fecha": "2024-10",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 6831.57
+  },
+  {
+   "fecha": "2024-10",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 16719.1
+  },
+  {
+   "fecha": "2024-10",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.4
+  },
+  {
+   "fecha": "2024-11",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 13931.94
+  },
+  {
+   "fecha": "2024-11",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 44856.03
+  },
+  {
+   "fecha": "2024-11",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 2145.22
+  },
+  {
+   "fecha": "2024-11",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 287.44
+  },
+  {
+   "fecha": "2024-11",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 5.33
+  },
+  {
+   "fecha": "2024-11",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 23616.21
+  },
+  {
+   "fecha": "2024-11",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 6550.11
+  },
+  {
+   "fecha": "2024-11",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 15153.11
+  },
+  {
+   "fecha": "2024-11",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.43
+  },
+  {
+   "fecha": "2024-12",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 14164.87
+  },
+  {
+   "fecha": "2024-12",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 44728.9
+  },
+  {
+   "fecha": "2024-12",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 1931.72
+  },
+  {
+   "fecha": "2024-12",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 267.14
+  },
+  {
+   "fecha": "2024-12",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 5.26
+  },
+  {
+   "fecha": "2024-12",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 23456.33
+  },
+  {
+   "fecha": "2024-12",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 5959.86
+  },
+  {
+   "fecha": "2024-12",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 15655.77
+  },
+  {
+   "fecha": "2024-12",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.46
+  },
+  {
+   "fecha": "2025-01",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 13797.65
+  },
+  {
+   "fecha": "2025-01",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 41174.09
+  },
+  {
+   "fecha": "2025-01",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 1982.46
+  },
+  {
+   "fecha": "2025-01",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 246.28
+  },
+  {
+   "fecha": "2025-01",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 5.38
+  },
+  {
+   "fecha": "2025-01",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 21827.91
+  },
+  {
+   "fecha": "2025-01",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 6112.62
+  },
+  {
+   "fecha": "2025-01",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 15346.82
+  },
+  {
+   "fecha": "2025-01",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.31
+  },
+  {
+   "fecha": "2025-02",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 13716.1
+  },
+  {
+   "fecha": "2025-02",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 44747.52
+  },
+  {
+   "fecha": "2025-02",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 1938.72
+  },
+  {
+   "fecha": "2025-02",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 243.14
+  },
+  {
+   "fecha": "2025-02",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 5.29
+  },
+  {
+   "fecha": "2025-02",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 22927.14
+  },
+  {
+   "fecha": "2025-02",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 6459.41
+  },
+  {
+   "fecha": "2025-02",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 13666.45
+  },
+  {
+   "fecha": "2025-02",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.33
+  },
+  {
+   "fecha": "2025-03",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 12836.76
+  },
+  {
+   "fecha": "2025-03",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 42656.54
+  },
+  {
+   "fecha": "2025-03",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 2018.23
+  },
+  {
+   "fecha": "2025-03",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 312.36
+  },
+  {
+   "fecha": "2025-03",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 4.81
+  },
+  {
+   "fecha": "2025-03",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 24804.48
+  },
+  {
+   "fecha": "2025-03",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 6421.43
+  },
+  {
+   "fecha": "2025-03",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 15748.46
+  },
+  {
+   "fecha": "2025-03",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.37
+  },
+  {
+   "fecha": "2025-04",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 14599.39
+  },
+  {
+   "fecha": "2025-04",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 43985.32
+  },
+  {
+   "fecha": "2025-04",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 1956.72
+  },
+  {
+   "fecha": "2025-04",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 370.18
+  },
+  {
+   "fecha": "2025-04",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 4.78
+  },
+  {
+   "fecha": "2025-04",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 29808.34
+  },
+  {
+   "fecha": "2025-04",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 6704.17
+  },
+  {
+   "fecha": "2025-04",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 15992.19
+  },
+  {
+   "fecha": "2025-04",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.45
+  },
+  {
+   "fecha": "2025-05",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 15528.28
+  },
+  {
+   "fecha": "2025-05",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 49431.96
+  },
+  {
+   "fecha": "2025-05",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 2051.63
+  },
+  {
+   "fecha": "2025-05",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 401.44
+  },
+  {
+   "fecha": "2025-05",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 5.38
+  },
+  {
+   "fecha": "2025-05",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 32277.99
+  },
+  {
+   "fecha": "2025-05",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 6839.69
+  },
+  {
+   "fecha": "2025-05",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 16527.68
+  },
+  {
+   "fecha": "2025-05",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.33
+  },
+  {
+   "fecha": "2025-06",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 16061.81
+  },
+  {
+   "fecha": "2025-06",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 49839.74
+  },
+  {
+   "fecha": "2025-06",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 2115.64
+  },
+  {
+   "fecha": "2025-06",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 436.1
+  },
+  {
+   "fecha": "2025-06",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 5.04
+  },
+  {
+   "fecha": "2025-06",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 35527.66
+  },
+  {
+   "fecha": "2025-06",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 7411.85
+  },
+  {
+   "fecha": "2025-06",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 16084.3
+  },
+  {
+   "fecha": "2025-06",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.49
+  },
+  {
+   "fecha": "2025-07",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 15090.56
+  },
+  {
+   "fecha": "2025-07",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 52817.55
+  },
+  {
+   "fecha": "2025-07",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 2217.59
+  },
+  {
+   "fecha": "2025-07",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 452.09
+  },
+  {
+   "fecha": "2025-07",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 5.24
+  },
+  {
+   "fecha": "2025-07",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 35146.03
+  },
+  {
+   "fecha": "2025-07",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 7119.03
+  },
+  {
+   "fecha": "2025-07",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 16775.26
+  },
+  {
+   "fecha": "2025-07",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.43
+  },
+  {
+   "fecha": "2025-08",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 15467.33
+  },
+  {
+   "fecha": "2025-08",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 56892.89
+  },
+  {
+   "fecha": "2025-08",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 2218.77
+  },
+  {
+   "fecha": "2025-08",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 423.73
+  },
+  {
+   "fecha": "2025-08",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 5.34
+  },
+  {
+   "fecha": "2025-08",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 34106.14
+  },
+  {
+   "fecha": "2025-08",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 6406.09
+  },
+  {
+   "fecha": "2025-08",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 16770.89
+  },
+  {
+   "fecha": "2025-08",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.58
+  },
+  {
+   "fecha": "2025-09",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 14539.71
+  },
+  {
+   "fecha": "2025-09",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 49325.4
+  },
+  {
+   "fecha": "2025-09",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 1969.01
+  },
+  {
+   "fecha": "2025-09",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 420.19
+  },
+  {
+   "fecha": "2025-09",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 4.7
+  },
+  {
+   "fecha": "2025-09",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 34982.14
+  },
+  {
+   "fecha": "2025-09",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 6614.53
+  },
+  {
+   "fecha": "2025-09",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 17426.56
+  },
+  {
+   "fecha": "2025-09",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.36
+  },
+  {
+   "fecha": "2025-10",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 13848.6
+  },
+  {
+   "fecha": "2025-10",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 48068.86
+  },
+  {
+   "fecha": "2025-10",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 1958.92
+  },
+  {
+   "fecha": "2025-10",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 342.4
+  },
+  {
+   "fecha": "2025-10",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 4.45
+  },
+  {
+   "fecha": "2025-10",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 28967.34
+  },
+  {
+   "fecha": "2025-10",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 6000.37
+  },
+  {
+   "fecha": "2025-10",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 16487.88
+  },
+  {
+   "fecha": "2025-10",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.42
+  },
+  {
+   "fecha": "2025-11",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 14074.87
+  },
+  {
+   "fecha": "2025-11",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 47948.4
+  },
+  {
+   "fecha": "2025-11",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 2018.56
+  },
+  {
+   "fecha": "2025-11",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 296.89
+  },
+  {
+   "fecha": "2025-11",
+   "sede": "Antofagasta",
+   "fuente": "refrigerante_r410a",
+   "cantidad": 1.5
+  },
+  {
+   "fecha": "2025-11",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 4.75
+  },
+  {
+   "fecha": "2025-11",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 26216.27
+  },
+  {
+   "fecha": "2025-11",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 5416.35
+  },
+  {
+   "fecha": "2025-11",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 15899.06
+  },
+  {
+   "fecha": "2025-11",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.43
+  },
+  {
+   "fecha": "2025-12",
+   "sede": "Antofagasta",
+   "fuente": "diesel",
+   "cantidad": 12475.37
+  },
+  {
+   "fecha": "2025-12",
+   "sede": "Antofagasta",
+   "fuente": "electricidad_sen",
+   "cantidad": 47245.16
+  },
+  {
+   "fecha": "2025-12",
+   "sede": "Antofagasta",
+   "fuente": "gasolina",
+   "cantidad": 1772.34
+  },
+  {
+   "fecha": "2025-12",
+   "sede": "Antofagasta",
+   "fuente": "glp",
+   "cantidad": 250.85
+  },
+  {
+   "fecha": "2025-12",
+   "sede": "Antofagasta",
+   "fuente": "residuos_relleno",
+   "cantidad": 4.58
+  },
+  {
+   "fecha": "2025-12",
+   "sede": "Antofagasta",
+   "fuente": "vuelos_nacionales",
+   "cantidad": 23210.79
+  },
+  {
+   "fecha": "2025-12",
+   "sede": "Mejillones",
+   "fuente": "diesel",
+   "cantidad": 5882.99
+  },
+  {
+   "fecha": "2025-12",
+   "sede": "Mejillones",
+   "fuente": "electricidad_sen",
+   "cantidad": 16599.26
+  },
+  {
+   "fecha": "2025-12",
+   "sede": "Mejillones",
+   "fuente": "residuos_relleno",
+   "cantidad": 2.21
+  }
+ ]
+}

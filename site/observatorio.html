@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Observatorio RETC</title>
+  <meta name="description" content="Emisiones de CO2 de fuentes puntuales en Chile según el RETC del Ministerio del Medio Ambiente.">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="marca" href="index.html">Sustentabilidad Chile</a>
+    <nav>
+      <a href="index.html">Inicio</a>
+      <a href="huella.html">Huella de carbono</a>
+      <a href="observatorio.html" aria-current="page">Observatorio RETC</a>
+    </nav>
+    <button class="boton-tema" type="button">Modo oscuro</button>
+  </header>
+
+  <main>
+    <h1>Observatorio de emisiones de CO₂ en Chile</h1>
+    <p class="subtitulo">
+      Emisiones de dióxido de carbono declaradas por establecimientos industriales (fuentes puntuales) en el
+      Registro de Emisiones y Transferencias de Contaminantes (RETC) del Ministerio del Medio Ambiente.
+    </p>
+
+    <div id="sin-datos" class="aviso oculto">
+      Aún no hay datos del RETC procesados. Se generan con <code>python -m pipeline.observatorio</code>,
+      que descarga los archivos oficiales desde datos.gob.cl. El GitHub Action del repositorio lo ejecuta automáticamente
+      cada mes.
+    </div>
+
+    <div id="contenido" class="oculto">
+      <section class="kpis">
+        <div class="kpi">
+          <div class="etiqueta">CO₂ emitido · <span id="kpi-anio"></span></div>
+          <div class="valor" id="kpi-total">—</div>
+          <div class="detalle" id="kpi-delta">&nbsp;</div>
+        </div>
+        <div class="kpi">
+          <div class="etiqueta">Región con más emisiones</div>
+          <div class="valor" id="kpi-region" style="font-size: 1.4rem">—</div>
+          <div class="detalle" id="kpi-region-det">&nbsp;</div>
+        </div>
+        <div class="kpi">
+          <div class="etiqueta">Rubro con más emisiones</div>
+          <div class="valor" id="kpi-rubro" style="font-size: 1.4rem">—</div>
+          <div class="detalle" id="kpi-rubro-det">&nbsp;</div>
+        </div>
+      </section>
+
+      <section class="grilla">
+        <article class="tarjeta c-12">
+          <h2>Emisiones de CO₂ por año</h2>
+          <p class="nota">Millones de toneladas de CO₂, todas las fuentes puntuales declaradas</p>
+          <div id="g-anios" class="grafico" role="img" aria-label="Barras de emisiones totales de CO2 por año"></div>
+        </article>
+        <article class="tarjeta c-6">
+          <h2>Por región</h2>
+          <p class="nota">Millones de tCO₂, último año disponible</p>
+          <div id="g-region" class="grafico alto" role="img" aria-label="Barras horizontales de emisiones por región"></div>
+        </article>
+        <article class="tarjeta c-6">
+          <h2>Por rubro</h2>
+          <p class="nota">Millones de tCO₂, 10 rubros principales</p>
+          <div id="g-rubro" class="grafico alto" role="img" aria-label="Barras horizontales de emisiones por rubro"></div>
+        </article>
+        <article class="tarjeta c-12">
+          <h2>Los 15 establecimientos con más emisiones</h2>
+          <div class="tabla-envoltura">
+            <table>
+              <thead><tr><th>#</th><th>Establecimiento</th><th>Razón social</th><th>Región</th><th>Rubro</th><th class="num">tCO₂</th></tr></thead>
+              <tbody id="tabla-top"></tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+      <article class="tarjeta c-12" id="calidad" hidden style="margin-top: 12px">
+        <h2>Calidad de datos: declaraciones excluidas</h2>
+        <p class="nota" id="calidad-nota"></p>
+        <div class="tabla-envoltura">
+          <table>
+            <thead><tr><th>Año</th><th>Establecimiento</th><th>Rubro</th><th class="num">tCO₂ declaradas</th></tr></thead>
+            <tbody id="tabla-calidad"></tbody>
+          </table>
+        </div>
+      </article>
+      <div class="aviso" id="excluidos" hidden></div>
+      <div class="aviso">Fuente: <span id="fuente"></span>. Las cifras corresponden a lo declarado por cada establecimiento.
+        Desde 2023 se usa el valor validado por el RETC (<code>emision_retc</code>), porque el total declarado incluye errores
+        evidentes, como hornos de panadería con millones de toneladas de CO₂.</div>
+    </div>
+  </main>
+
+  <footer>Proyecto de portafolio · Python + HTML, sin licencias de BI</footer>
+
+  <script src="assets/vendor/echarts.min.js"></script>
+  <script src="assets/js/comun.js"></script>
+  <script src="assets/js/observatorio.js"></script>
+</body>
+</html>

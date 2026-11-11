@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Huella de Carbono</title>
+  <meta name="description" content="Dashboard de huella de carbono corporativa (alcances 1, 2 y 3) con factores de emisión para Chile.">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="marca" href="index.html">Sustentabilidad Chile</a>
+    <nav>
+      <a href="index.html">Inicio</a>
+      <a href="huella.html" aria-current="page">Huella de carbono</a>
+      <a href="observatorio.html">Observatorio RETC</a>
+    </nav>
+    <button class="boton-tema" type="button">Modo oscuro</button>
+  </header>
+
+  <main>
+    <h1>Huella de carbono corporativa</h1>
+    <p class="subtitulo">
+      Emisiones de gases de efecto invernadero según el GHG Protocol, calculadas a partir de los consumos de la empresa.
+      Empresa mostrada: <strong id="empresa">—</strong>.
+    </p>
+
+    <div class="filtros">
+      <label>Año <select id="filtro-anio"></select></label>
+      <label>Sede <select id="filtro-sede"></select></label>
+      <span class="espaciador"></span>
+      <a class="boton" href="data/plantilla_consumos.csv" download>Descargar plantilla</a>
+      <label class="boton principal" for="archivo">Cargar mis consumos (CSV)</label>
+      <input id="archivo" type="file" accept=".csv,text/csv" class="oculto">
+      <button id="volver-demo" class="boton oculto" type="button">Volver a la demo</button>
+    </div>
+    <div id="mensaje" class="aviso oculto" role="status"></div>
+
+    <section class="kpis" aria-label="Indicadores principales">
+      <div class="kpi">
+        <div class="etiqueta">Emisiones totales</div>
+        <div class="valor" id="kpi-total">—</div>
+        <div class="detalle" id="kpi-total-delta">&nbsp;</div>
+      </div>
+      <div class="kpi">
+        <div class="etiqueta"><span class="punto" style="background: var(--series-1)"></span>Alcance 1 · directas</div>
+        <div class="valor" id="kpi-a1">—</div>
+        <div class="detalle" id="kpi-a1-det">&nbsp;</div>
+      </div>
+      <div class="kpi">
+        <div class="etiqueta"><span class="punto" style="background: var(--series-2)"></span>Alcance 2 · electricidad</div>
+        <div class="valor" id="kpi-a2">—</div>
+        <div class="detalle" id="kpi-a2-det">&nbsp;</div>
+      </div>
+      <div class="kpi">
+        <div class="etiqueta"><span class="punto" style="background: var(--series-3)"></span>Alcance 3 · cadena de valor</div>
+        <div class="valor" id="kpi-a3">—</div>
+        <div class="detalle" id="kpi-a3-det">&nbsp;</div>
+      </div>
+    </section>
+
+    <section class="grilla">
+      <article class="tarjeta c-8">
+        <h2>Emisiones mensuales por alcance</h2>
+        <p class="nota">tCO₂e por mes del año seleccionado</p>
+        <div class="leyenda">
+          <span><span class="punto" style="background: var(--series-1)"></span>Alcance 1</span>
+          <span><span class="punto" style="background: var(--series-2)"></span>Alcance 2</span>
+          <span><span class="punto" style="background: var(--series-3)"></span>Alcance 3</span>
+        </div>
+        <div id="g-mensual" class="grafico" role="img" aria-label="Barras apiladas de emisiones mensuales por alcance"></div>
+      </article>
+      <article class="tarjeta c-4">
+        <h2>Evolución anual</h2>
+        <p class="nota">Total tCO₂e por año, misma sede</p>
+        <div id="g-anual" class="grafico" role="img" aria-label="Barras de emisiones totales por año"></div>
+      </article>
+      <article class="tarjeta c-12">
+        <h2>¿De dónde vienen las emisiones?</h2>
+        <p class="nota">tCO₂e por fuente en el año seleccionado; el color indica el alcance</p>
+        <div id="g-fuentes" class="grafico" role="img" aria-label="Barras horizontales de emisiones por fuente"></div>
+      </article>
+      <article class="tarjeta c-12">
+        <h2>Detalle por fuente</h2>
+        <div class="tabla-envoltura">
+          <table>
+            <thead>
+              <tr><th>Fuente</th><th>Alcance</th><th class="num">Consumo</th><th>Unidad</th>
+                <th class="num">Factor (kgCO₂e/u)</th><th class="num">tCO₂e</th><th class="num">% del total</th></tr>
+            </thead>
+            <tbody id="tabla-fuentes"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <div class="aviso">
+      <strong>Metodología.</strong> Emisiones = consumo × factor de emisión, agrupadas en alcances según el GHG Protocol.
+      Los factores (en <a href="https://github.com/josemamunoz/medio_ambiente/blob/main/data/referencia/factores_emision.csv">factores_emision.csv</a>)
+      son <em>referenciales</em>: los de combustibles usan valores por defecto del IPCC 2006 (solo CO₂). El factor de la red eléctrica es un valor de demo
+      que debe reemplazarse por el publicado por la CNE en Energía Abierta antes de hacer un reporte oficial.
+      Los datos de la demo corresponden a una empresa ficticia.
+    </div>
+  </main>
+
+  <footer>Proyecto de portafolio · Python + HTML, sin licencias de BI</footer>
+
+  <script src="assets/vendor/echarts.min.js"></script>
+  <script src="assets/js/comun.js"></script>
+  <script src="assets/js/huella.js"></script>
+</body>
+</html>
