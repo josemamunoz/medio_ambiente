@@ -35,6 +35,11 @@ MAX_ANIOS = 6  # cada archivo anual pesa decenas de MB
 # archivos traen "emision_retc" (valor validado por el RETC) y se usa ese; el
 # archivo 2022 no lo trae y su "cantidad_toneladas" incluye declaraciones
 # imposibles (p. ej. hornos de una fundición con varios Mt de CO2 cada uno).
+# Ninguna fuente individual en Chile emite más que esto: la central más grande
+# (Cochrane, Mejillones) declara ~3,1 Mt de CO2 al año. Filas por sobre el tope
+# son errores de declaración y se excluyen, dejando registro de cada una.
+MAX_T_POR_FUENTE = 4_000_000
+
 ANIOS_EXCLUIDOS = {
     2022: "El archivo 2022 no incluye el valor validado por el RETC y contiene declaraciones "
     "imposibles; su total (113 Mt) casi duplica al de 2021.",
@@ -266,6 +271,8 @@ def procesar(rutas: list[Path]) -> dict:
     df["anio"] = df["anio"].astype(int)
     excluidos = {a: m for a, m in ANIOS_EXCLUIDOS.items() if a in set(df["anio"])}
     df = df[~df["anio"].isin(excluidos)]
+    implausibles = df[df["toneladas"] > MAX_T_POR_FUENTE]
+    df = df[df["toneladas"] <= MAX_T_POR_FUENTE]
     ultimo = int(df["anio"].max())
     actual = df[df["anio"] == ultimo]
 
@@ -284,6 +291,11 @@ def procesar(rutas: list[Path]) -> dict:
         "fuente": "RETC – Emisiones al aire de fuentes puntuales (MMA), vía datos.gob.cl",
         "ultimo_anio": ultimo,
         "anios_excluidos": [{"anio": a, "motivo": m} for a, m in sorted(excluidos.items())],
+        "fuentes_excluidas": [
+            {"anio": int(r.anio), "establecimiento": str(r.establecimiento), "rubro": str(r.rubro), "tco2": round(float(r.toneladas), 1)}
+            for r in implausibles.sort_values("toneladas", ascending=False).itertuples()
+        ],
+        "tope_por_fuente_t": MAX_T_POR_FUENTE,
         "por_anio": [{"anio": int(a), "tco2": round(float(t), 1)} for a, t in por_anio.items()],
         "por_region": top("region", 16),
         "por_rubro": top("rubro"),

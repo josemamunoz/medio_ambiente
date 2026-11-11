@@ -207,3 +207,18 @@ def test_anio_excluido_no_se_publica(tmp_path):
     res = observatorio.procesar([archivo])
     assert [r["anio"] for r in res["por_anio"]] == [2021]
     assert res["anios_excluidos"][0]["anio"] == 2022
+
+
+def test_fuente_implausible_se_excluye_y_registra(tmp_path):
+    archivo = tmp_path / "retc.csv"
+    pd.DataFrame(
+        {
+            "Año": [2024, 2024],
+            "Nombre establecimiento": ["Central real", "Panadería"],
+            "Contaminante": ["CO2", "CO2"],
+            "Cantidad toneladas": [2_000_000, 18_500_000],
+        }
+    ).to_csv(archivo, index=False)
+    res = observatorio.procesar([archivo])
+    assert res["por_anio"] == [{"anio": 2024, "tco2": 2_000_000.0}]
+    assert res["fuentes_excluidas"][0]["establecimiento"] == "Panadería"

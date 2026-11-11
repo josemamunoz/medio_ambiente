@@ -62,8 +62,20 @@ Se aceptan archivos separados por coma o por punto y coma (Excel en español).
   promedio anual del dataset *Factor de Emisión – Promedio Mensual* de la CNE (Energía Abierta).
 - Los factores de alcance 3 (vuelos y residuos) son órdenes de magnitud basados en DEFRA/DESNZ; hay que verificar la versión vigente.
 - La empresa de la demo es ficticia.
-- El parser del RETC reconoce las columnas por patrones, porque sus nombres cambian entre años. Si un archivo nuevo
-  no se reconoce, el script indica qué columnas encontró para ajustar `COLUMNAS` en `pipeline/observatorio.py`.
+- El parser del RETC reconoce las columnas por patrones, porque sus nombres (y hasta el idioma) cambian entre años.
+  Si un archivo nuevo no se reconoce, el script imprime sus columnas para ajustar `COLUMNAS` en `pipeline/observatorio.py`.
+
+### Calidad de los datos del RETC
+
+Los archivos del RETC traen errores de declaración evidentes: en 2024 un horno de panadería declara 18,5 Mt de CO₂,
+seis veces lo que emite la central más grande del país. Sumar todo sin filtrar da totales mayores que el inventario
+nacional completo de Chile. Por eso el observatorio:
+
+1. Usa la columna `emision_retc` (valor validado por el RETC) cuando existe, desde 2023.
+2. Excluye toda fuente que declare más de 4 Mt de CO₂ al año (la central más grande, Cochrane, declara ~3,1 Mt) y la lista en la página.
+3. No publica 2022: ese archivo no trae el valor validado y su total (113 Mt) casi duplica el de 2021.
+
+Resultado (Mt de CO₂ de fuentes puntuales): 2020: 62 · 2021: 67 · 2023: 54 · 2024: 49 · 2025: 47.
 
 ## Próximos pasos
 

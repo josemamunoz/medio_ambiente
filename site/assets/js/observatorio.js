@@ -83,6 +83,15 @@
         <td>${escapar(e.region)}</td><td>${escapar(e.rubro)}</td><td class="num">${fmt(e.tco2, 0)}</td></tr>`)
       .join("");
     $("fuente").textContent = datos.fuente;
+    const malas = datos.fuentes_excluidas || [];
+    $("calidad").hidden = malas.length === 0;
+    $("calidad-nota").textContent =
+      `Fuentes que declaran más de ${fmt((datos.tope_por_fuente_t || 0) / M, 0)} millones de toneladas al año, ` +
+      "más que la central termoeléctrica más grande de Chile. Son errores de declaración y no se suman a los totales.";
+    $("tabla-calidad").innerHTML = malas
+      .map((e) => `<tr><td>${e.anio}</td><td>${escapar(e.establecimiento)}</td><td>${escapar(e.rubro)}</td>
+        <td class="num">${fmt(e.tco2, 0)}</td></tr>`)
+      .join("");
     const excl = datos.anios_excluidos || [];
     $("excluidos").hidden = excl.length === 0;
     $("excluidos").replaceChildren(
