@@ -163,3 +163,26 @@ def test_numeros_formato_chileno():
     serie = pd.Series(["1.234,5", "10,25", "7", "abc"])
     assert observatorio._a_numero(serie).tolist()[:3] == [1234.5, 10.25, 7.0]
     assert pd.isna(observatorio._a_numero(serie).iloc[3])
+
+
+def test_excel_en_ingles_en_segunda_hoja(tmp_path):
+    """Archivo con portada en la primera hoja y la tabla en inglés en la segunda."""
+    from openpyxl import Workbook
+
+    wb = Workbook()
+    wb.active.title = "Notas"
+    wb.active.append(["Este archivo contiene las emisiones declaradas"])
+    ws = wb.create_sheet("Datos")
+    ws.append([])
+    ws.append(["year", "facility_name", "region", "pollutant", "amount_tonnes"])
+    ws.append([2025, "Central A", "Antofagasta", "Carbon dioxide", 900])
+    ws.append([2025, "Central A", "Antofagasta", "Carbon monoxide", 5])
+    archivo = tmp_path / "retc_2025.xlsx"
+    wb.save(archivo)
+    res = observatorio.procesar([archivo])
+    assert res["por_anio"] == [{"anio": 2025, "tco2": 900.0}]
+
+
+def test_es_co2_en_ingles():
+    assert observatorio.es_co2("Carbon dioxide")
+    assert not observatorio.es_co2("Carbon monoxide")

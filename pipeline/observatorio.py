@@ -34,14 +34,14 @@ MAX_ANIOS = 6  # cada archivo anual pesa decenas de MB
 # Nombre lógico -> patrones posibles en el encabezado (ya normalizado).
 # El RETC ha cambiado nombres de columnas entre años, por eso se buscan por patrón.
 COLUMNAS = {
-    "anio": [r"^ano$", r"^anio$", r"^periodo$", r"^ano_"],
-    "establecimiento": [r"nombre_establecimiento", r"^establecimiento", r"nombre_fuente"],
-    "razon_social": [r"razon_social", r"raz_social"],
+    "anio": [r"^ano$", r"^anio$", r"^periodo$", r"^ano_", r"^year$", r"^year_"],
+    "establecimiento": [r"nombre_establecimiento", r"^establecimiento", r"nombre_fuente", r"facility", r"establishment"],
+    "razon_social": [r"razon_social", r"raz_social", r"company", r"business_name", r"legal_name"],
     "region": [r"^region$", r"^region_", r"nombre_region"],
-    "comuna": [r"^comuna$", r"^comuna_", r"nombre_comuna"],
-    "rubro": [r"rubro", r"ciiu.*glosa", r"glosa_ciiu", r"sector", r"actividad"],
-    "contaminante": [r"contaminante"],
-    "toneladas": [r"cantidad_toneladas", r"toneladas", r"emision", r"cantidad"],
+    "comuna": [r"^comuna$", r"^comuna_", r"nombre_comuna", r"commune", r"municipality"],
+    "rubro": [r"rubro", r"ciiu.*glosa", r"glosa_ciiu", r"sector", r"actividad", r"industry", r"activity"],
+    "contaminante": [r"contaminante", r"pollutant", r"contaminant", r"substance"],
+    "toneladas": [r"cantidad_toneladas", r"toneladas", r"emision", r"cantidad", r"tonnes", r"tons", r"quantity", r"amount"],
 }
 
 
@@ -150,6 +150,15 @@ def _fila_encabezado(muestra: pd.DataFrame) -> int:
     return 0
 
 
+def _fila_encabezado_o_none(muestra: pd.DataFrame) -> int | None:
+    fila = _fila_encabezado(muestra)
+    if fila or {"anio", "contaminante", "toneladas"} <= _mapear_columnas(
+        [str(v) for v in muestra.iloc[0].dropna().tolist()] if len(muestra) else []
+    ).keys():
+        return fila
+    return None
+
+
 def _leer(ruta: Path) -> pd.DataFrame:
     if ruta.suffix.lower() == ".csv":
         for enc in ("utf-8", "latin-1"):
@@ -157,8 +166,18 @@ def _leer(ruta: Path) -> pd.DataFrame:
                 return pd.read_csv(ruta, sep=None, engine="python", encoding=enc)
             except UnicodeDecodeError:
                 continue
-    fila = _fila_encabezado(pd.read_excel(ruta, header=None, nrows=30))
-    return pd.read_excel(ruta, header=fila)
+    # Busca la hoja y la fila donde están los encabezados (algunos archivos traen
+    # portada, notas o filas de título antes de la tabla).
+    hojas = pd.read_excel(ruta, sheet_name=None, header=None, nrows=60)
+    for nombre, muestra in hojas.items():
+        fila = _fila_encabezado_o_none(muestra)
+        if fila is not None:
+            return pd.read_excel(ruta, sheet_name=nombre, header=fila)
+    for nombre, muestra in hojas.items():
+        print(f"  {ruta.name} · hoja '{nombre}': primeras filas no vacías:")
+        for _, f in muestra.dropna(how="all").head(6).iterrows():
+            print("    ", [str(v)[:40] for v in f.dropna().tolist()[:14]])
+    return pd.read_excel(ruta)
 
 
 def _a_numero(serie: pd.Series) -> pd.Series:
@@ -199,8 +218,8 @@ def leer_archivo(ruta: Path) -> pd.DataFrame:
 
 def es_co2(contaminante: str) -> bool:
     norm = _normalizar(contaminante)
-    return norm in {"co2", "dioxido_de_carbono", "dioxido_de_carbono_co2"} or (
-        "dioxido_de_carbono" in norm and "mono" not in norm
+    return norm in {"co2", "dioxido_de_carbono", "dioxido_de_carbono_co2", "carbon_dioxide"} or (
+        ("dioxido_de_carbono" in norm or "carbon_dioxide" in norm) and "mono" not in norm
     )
 
 
