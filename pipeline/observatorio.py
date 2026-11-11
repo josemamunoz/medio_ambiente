@@ -215,8 +215,12 @@ def leer_archivo(ruta: Path) -> pd.DataFrame:
     )
     if co2.empty:
         print(f"  {ruta.name}: contaminantes más frecuentes: {df['contaminante'].value_counts().head(8).to_dict()}")
-        print(f"  {ruta.name}: todas las columnas: {list(crudo.columns)}")
-        print(f"  {ruta.name}: fila de ejemplo: {crudo.iloc[0].astype(str).str[:30].to_dict()}")
+    print(f"  {ruta.name}: todas las columnas: {list(crudo.columns)}")
+    if not co2.empty:
+        por_rubro = co2.groupby("rubro")["toneladas"].sum().nlargest(6) / 1e6
+        print(f"  {ruta.name}: CO2 por rubro (Mt): {por_rubro.round(1).to_dict()}")
+        ejemplo = crudo.loc[co2.index[co2['toneladas'].argmax()]]
+        print(f"  {ruta.name}: fila con más CO2: {ejemplo.astype(str).str[:35].to_dict()}")
     return df
 
 
