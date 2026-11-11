@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import time
 import unicodedata
@@ -73,16 +74,29 @@ def _anio_recurso(recurso: dict) -> int:
     return int(hallado[0]) if hallado else 0
 
 
-def descargar_archivo(url: str, destino: Path, intentos: int = 5, espera: float = 2.0) -> None:
-    """Descarga con reintentos. Si el servidor corta la conexión, retoma desde
-    el byte donde quedó (cabecera Range) cuando el servidor lo permite.
-    Escribe en un .part y solo lo renombra al terminar, para no dejar archivos a medias."""
+REINTENTABLES = {429, 500, 502, 503, 504}  # servidor saturado o caído momentáneamente
+
+
+class ServidorOcupado(Exception):
+    def __init__(self, codigo: int, espera: float | None):
+        super().__init__(f"HTTP {codigo}")
+        self.espera = espera
+
+
+def descargar_archivo(url: str, destino: Path, intentos: int = 6, espera: float = 5.0) -> None:
+    """Descarga con reintentos ante cortes de conexión y respuestas 429/5xx.
+    Si la conexión se corta, retoma desde el byte donde quedó (cabecera Range)
+    cuando el servidor lo permite. Escribe en un .part y solo lo renombra al
+    terminar, para no dejar archivos a medias."""
     parcial = destino.with_name(destino.name + ".part")
     for intento in range(1, intentos + 1):
         ya = parcial.stat().st_size if parcial.exists() else 0
         cabeceras = {"Range": f"bytes={ya}-"} if ya else {}
         try:
             with requests.get(url, timeout=300, stream=True, headers=cabeceras) as r:
+                if r.status_code in REINTENTABLES:
+                    retry_after = r.headers.get("Retry-After", "")
+                    raise ServidorOcupado(r.status_code, float(retry_after) if retry_after.isdigit() else None)
                 r.raise_for_status()
                 modo = "ab" if ya and r.status_code == 206 else "wb"  # 200 = el servidor reenvía todo
                 with open(parcial, modo) as f:
@@ -90,30 +104,39 @@ def descargar_archivo(url: str, destino: Path, intentos: int = 5, espera: float 
                         f.write(bloque)
             parcial.replace(destino)
             return
-        except (requests.ConnectionError, requests.Timeout, requests.exceptions.ChunkedEncodingError) as error:
+        except (ServidorOcupado, requests.ConnectionError, requests.Timeout, requests.exceptions.ChunkedEncodingError) as error:
             if intento == intentos:
+                if isinstance(error, ServidorOcupado):
+                    raise requests.HTTPError(f"{error} tras {intentos} intentos: {url}") from error
                 raise
-            pausa = espera * 2 ** (intento - 1)
-            print(f"  conexión interrumpida ({error.__class__.__name__}); reintento {intento}/{intentos - 1} en {pausa:.0f}s")
+            pausa = min(getattr(error, "espera", None) or espera * 2 ** (intento - 1), 120)
+            motivo = str(error) if isinstance(error, ServidorOcupado) else error.__class__.__name__
+            print(f"  {motivo}; reintento {intento}/{intentos - 1} en {pausa:.0f}s")
             time.sleep(pausa)
 
 
-def descargar(max_anios: int = MAX_ANIOS) -> list[Path]:
+def descargar(max_anios: int = MAX_ANIOS, pausa_entre: float = 5.0) -> list[Path]:
     CARPETA_RAW.mkdir(parents=True, exist_ok=True)
     recursos = sorted(listar_recursos(), key=_anio_recurso, reverse=True)[:max_anios]
-    rutas = []
-    for recurso in recursos:
+    rutas, faltantes = [], []
+    for i, recurso in enumerate(recursos):
         url = recurso["url"]
         destino = CARPETA_RAW / url.rsplit("/", 1)[-1]
         if not destino.exists():
+            if i:
+                time.sleep(pausa_entre)  # no saturar el servidor del MMA
             print(f"Descargando {recurso.get('name')} …")
             try:
                 descargar_archivo(url, destino)
             except requests.RequestException as error:
                 # Un año que no baja no debe impedir publicar los demás.
                 print(f"AVISO: no se pudo descargar {recurso.get('name')}: {error}")
+                faltantes.append(recurso.get("name", url))
                 continue
         rutas.append(destino)
+    if faltantes and os.environ.get("GITHUB_ACTIONS"):
+        # Anotación visible en el resumen del Action, aunque el paso termine en verde.
+        print(f"::warning title=RETC incompleto::No se descargaron {len(faltantes)} archivo(s): {'; '.join(faltantes)}")
     return rutas
 
 

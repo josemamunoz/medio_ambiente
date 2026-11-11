@@ -105,3 +105,37 @@ def test_descarga_retoma_tras_corte(tmp_path):
     assert estado["peticiones"] == 2
     retomado = int(estado["rangos"][1].split("=")[1].rstrip("-"))  # el reintento pidió solo lo que faltaba
     assert 0 < retomado <= len(contenido) // 2
+
+
+def test_descarga_reintenta_503(tmp_path):
+    """El servidor responde 503 dos veces (como el del MMA saturado) y luego entrega el archivo."""
+    import threading
+    from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+
+    estado = {"peticiones": 0}
+
+    class Manejador(BaseHTTPRequestHandler):
+        def log_message(self, *args):
+            pass
+
+        def do_GET(self):
+            estado["peticiones"] += 1
+            if estado["peticiones"] <= 2:
+                self.send_response(503)
+                self.send_header("Content-Length", "0")
+                self.end_headers()
+                return
+            self.send_response(200)
+            self.send_header("Content-Length", "5")
+            self.end_headers()
+            self.wfile.write(b"hola!")
+
+    servidor = ThreadingHTTPServer(("127.0.0.1", 0), Manejador)
+    threading.Thread(target=servidor.serve_forever, daemon=True).start()
+    try:
+        destino = tmp_path / "x.csv"
+        observatorio.descargar_archivo(f"http://127.0.0.1:{servidor.server_port}/x", destino, espera=0)
+    finally:
+        servidor.shutdown()
+    assert destino.read_bytes() == b"hola!"
+    assert estado["peticiones"] == 3
