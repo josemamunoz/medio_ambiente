@@ -139,3 +139,27 @@ def test_descarga_reintenta_503(tmp_path):
         servidor.shutdown()
     assert destino.read_bytes() == b"hola!"
     assert estado["peticiones"] == 3
+
+
+def test_excel_con_filas_de_titulo(tmp_path):
+    """Los Excel 2023-2024 del RETC traen títulos antes de los encabezados."""
+    from openpyxl import Workbook
+
+    wb = Workbook()
+    ws = wb.active
+    ws.append(["Registro de Emisiones y Transferencias de Contaminantes"])
+    ws.append(["Emisiones al aire de fuentes puntuales 2024"])
+    ws.append([])
+    ws.append(["Año", "Nombre establecimiento", "Región", "Contaminante", "Cantidad toneladas"])
+    ws.append([2024, "Central A", "Antofagasta", "Dióxido de carbono (CO2)", 1500.5])
+    ws.append([2024, "Central A", "Antofagasta", "Material particulado", 2])
+    archivo = tmp_path / "retc_2024.xlsx"
+    wb.save(archivo)
+    res = observatorio.procesar([archivo])
+    assert res["por_anio"] == [{"anio": 2024, "tco2": 1500.5}]
+
+
+def test_numeros_formato_chileno():
+    serie = pd.Series(["1.234,5", "10,25", "7", "abc"])
+    assert observatorio._a_numero(serie).tolist()[:3] == [1234.5, 10.25, 7.0]
+    assert pd.isna(observatorio._a_numero(serie).iloc[3])

@@ -140,6 +140,16 @@ def descargar(max_anios: int = MAX_ANIOS, pausa_entre: float = 5.0) -> list[Path
     return rutas
 
 
+def _fila_encabezado(muestra: pd.DataFrame) -> int:
+    """Algunos Excel del RETC traen filas de título antes de los encabezados.
+    Devuelve la primera fila que contiene las columnas obligatorias."""
+    for i, fila in muestra.iterrows():
+        mapa = _mapear_columnas([str(v) for v in fila.dropna().tolist()])
+        if {"anio", "contaminante", "toneladas"} <= mapa.keys():
+            return int(i)
+    return 0
+
+
 def _leer(ruta: Path) -> pd.DataFrame:
     if ruta.suffix.lower() == ".csv":
         for enc in ("utf-8", "latin-1"):
@@ -147,7 +157,18 @@ def _leer(ruta: Path) -> pd.DataFrame:
                 return pd.read_csv(ruta, sep=None, engine="python", encoding=enc)
             except UnicodeDecodeError:
                 continue
-    return pd.read_excel(ruta)
+    fila = _fila_encabezado(pd.read_excel(ruta, header=None, nrows=30))
+    return pd.read_excel(ruta, header=fila)
+
+
+def _a_numero(serie: pd.Series) -> pd.Series:
+    """Convierte cantidades que pueden venir como 1234.5, '1234,5' o '1.234,5'."""
+    if pd.api.types.is_numeric_dtype(serie):
+        return serie
+    texto = serie.astype(str).str.strip()
+    formato_es = texto.str.contains(",", regex=False)
+    texto = texto.where(~formato_es, texto.str.replace(".", "", regex=False).str.replace(",", ".", regex=False))
+    return pd.to_numeric(texto, errors="coerce")
 
 
 def leer_archivo(ruta: Path) -> pd.DataFrame:
@@ -162,11 +183,18 @@ def leer_archivo(ruta: Path) -> pd.DataFrame:
     df = crudo[list(mapa.values())].rename(columns={v: k for k, v in mapa.items()})
     for faltante in COLUMNAS.keys() - mapa.keys():
         df[faltante] = "Sin dato"
-    df["toneladas"] = pd.to_numeric(
-        df["toneladas"].astype(str).str.replace(",", ".", regex=False), errors="coerce"
-    )
+    df["toneladas"] = _a_numero(df["toneladas"])
     df["anio"] = pd.to_numeric(df["anio"], errors="coerce")
-    return df.dropna(subset=["anio", "toneladas"])
+    df = df.dropna(subset=["anio", "toneladas"])
+    co2 = df[df["contaminante"].astype(str).map(es_co2)]
+    # Diagnóstico en el registro del Action: permite ver qué entendió el script de cada archivo.
+    print(
+        f"  {ruta.name}: {len(df):,} filas, años {sorted(df['anio'].astype(int).unique().tolist())}, "
+        f"{len(co2):,} filas de CO2 ({co2['toneladas'].sum():,.0f} t). Columnas usadas: {mapa}"
+    )
+    if co2.empty:
+        print(f"  {ruta.name}: contaminantes más frecuentes: {df['contaminante'].value_counts().head(8).to_dict()}")
+    return df
 
 
 def es_co2(contaminante: str) -> bool:
