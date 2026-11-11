@@ -215,12 +215,20 @@ def leer_archivo(ruta: Path) -> pd.DataFrame:
     )
     if co2.empty:
         print(f"  {ruta.name}: contaminantes más frecuentes: {df['contaminante'].value_counts().head(8).to_dict()}")
-    print(f"  {ruta.name}: todas las columnas: {list(crudo.columns)}")
     if not co2.empty:
-        por_rubro = co2.groupby("rubro")["toneladas"].sum().nlargest(6) / 1e6
-        print(f"  {ruta.name}: CO2 por rubro (Mt): {por_rubro.round(1).to_dict()}")
-        ejemplo = crudo.loc[co2.index[co2['toneladas'].argmax()]]
-        print(f"  {ruta.name}: fila con más CO2: {ejemplo.astype(str).str[:35].to_dict()}")
+        # Diagnóstico de calidad: fuentes individuales con emisiones implausibles.
+        grandes = co2[co2["toneladas"] > 1e6].sort_values("toneladas", ascending=False)
+        tope = co2[co2["toneladas"] <= 4e6]["toneladas"].sum() / 1e6
+        print(f"  {ruta.name}: total {co2['toneladas'].sum() / 1e6:.1f} Mt; sin fuentes > 4 Mt: {tope:.1f} Mt")
+        if "emision_retc" in crudo.columns:
+            retc = _a_numero(crudo.loc[co2.index, "emision_retc"]).sum() / 1e6
+            print(f"  {ruta.name}: suma de emision_retc: {retc:.1f} Mt")
+        tipo = "tipo_fuente" if "tipo_fuente" in crudo.columns else None
+        for i, fila in grandes.head(12).iterrows():
+            print(
+                f"    > 1 Mt: {fila['toneladas'] / 1e6:6.2f} Mt | {str(fila['establecimiento'])[:40]} | "
+                f"{str(fila['rubro'])[:30]} | {str(crudo.at[i, tipo])[:30] if tipo else ''}"
+            )
     return df
 
 
