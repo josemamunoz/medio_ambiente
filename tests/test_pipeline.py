@@ -59,3 +59,49 @@ def test_es_co2():
     assert observatorio.es_co2("Dióxido de carbono")
     assert observatorio.es_co2("CO2")
     assert not observatorio.es_co2("Monóxido de carbono")
+
+
+def test_descarga_retoma_tras_corte(tmp_path):
+    """Servidor local que corta la primera conexión a la mitad y respeta Range."""
+    import threading
+    from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+
+    contenido = bytes(range(256)) * 4096  # 1 MiB
+    estado = {"peticiones": 0, "rangos": []}
+
+    class Manejador(BaseHTTPRequestHandler):
+        def log_message(self, *args):
+            pass
+
+        def do_GET(self):
+            estado["peticiones"] += 1
+            inicio = 0
+            rango = self.headers.get("Range")
+            estado["rangos"].append(rango)
+            if rango:
+                inicio = int(rango.split("=")[1].rstrip("-"))
+                self.send_response(206)
+            else:
+                self.send_response(200)
+            cuerpo = contenido[inicio:]
+            self.send_header("Content-Length", str(len(cuerpo)))
+            self.end_headers()
+            if estado["peticiones"] == 1:
+                self.wfile.write(cuerpo[: len(cuerpo) // 2])  # corte a la mitad
+                self.wfile.flush()
+                self.connection.close()
+                return
+            self.wfile.write(cuerpo)
+
+    servidor = ThreadingHTTPServer(("127.0.0.1", 0), Manejador)
+    threading.Thread(target=servidor.serve_forever, daemon=True).start()
+    try:
+        destino = tmp_path / "retc.xlsx"
+        observatorio.descargar_archivo(f"http://127.0.0.1:{servidor.server_port}/x", destino, espera=0)
+    finally:
+        servidor.shutdown()
+    assert destino.read_bytes() == contenido
+    assert not (tmp_path / "retc.xlsx.part").exists()
+    assert estado["peticiones"] == 2
+    retomado = int(estado["rangos"][1].split("=")[1].rstrip("-"))  # el reintento pidió solo lo que faltaba
+    assert 0 < retomado <= len(contenido) // 2

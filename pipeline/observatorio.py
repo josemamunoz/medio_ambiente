@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import time
 import unicodedata
 from pathlib import Path
 
@@ -27,6 +28,7 @@ CKAN_API = "https://datos.gob.cl/api/3/action/package_show"
 DATASET = "emisiones-al-aire-de-fuente-puntuales"
 CARPETA_RAW = DATA / "raw" / "retc"
 SALIDA = SITE_DATA / "observatorio.json"
+MAX_ANIOS = 6  # cada archivo anual pesa decenas de MB
 
 # Nombre lógico -> patrones posibles en el encabezado (ya normalizado).
 # El RETC ha cambiado nombres de columnas entre años, por eso se buscan por patrón.
@@ -66,19 +68,51 @@ def listar_recursos() -> list[dict]:
     return [r for r in recursos if str(r.get("format", "")).lower() in {"csv", "xlsx", "xls"} and r.get("url")]
 
 
-def descargar() -> list[Path]:
+def _anio_recurso(recurso: dict) -> int:
+    hallado = re.findall(r"(?:19|20)\d{2}", f"{recurso.get('name', '')} {recurso.get('url', '')}")
+    return int(hallado[0]) if hallado else 0
+
+
+def descargar_archivo(url: str, destino: Path, intentos: int = 5, espera: float = 2.0) -> None:
+    """Descarga con reintentos. Si el servidor corta la conexión, retoma desde
+    el byte donde quedó (cabecera Range) cuando el servidor lo permite.
+    Escribe en un .part y solo lo renombra al terminar, para no dejar archivos a medias."""
+    parcial = destino.with_name(destino.name + ".part")
+    for intento in range(1, intentos + 1):
+        ya = parcial.stat().st_size if parcial.exists() else 0
+        cabeceras = {"Range": f"bytes={ya}-"} if ya else {}
+        try:
+            with requests.get(url, timeout=300, stream=True, headers=cabeceras) as r:
+                r.raise_for_status()
+                modo = "ab" if ya and r.status_code == 206 else "wb"  # 200 = el servidor reenvía todo
+                with open(parcial, modo) as f:
+                    for bloque in r.iter_content(1 << 16):
+                        f.write(bloque)
+            parcial.replace(destino)
+            return
+        except (requests.ConnectionError, requests.Timeout, requests.exceptions.ChunkedEncodingError) as error:
+            if intento == intentos:
+                raise
+            pausa = espera * 2 ** (intento - 1)
+            print(f"  conexión interrumpida ({error.__class__.__name__}); reintento {intento}/{intentos - 1} en {pausa:.0f}s")
+            time.sleep(pausa)
+
+
+def descargar(max_anios: int = MAX_ANIOS) -> list[Path]:
     CARPETA_RAW.mkdir(parents=True, exist_ok=True)
+    recursos = sorted(listar_recursos(), key=_anio_recurso, reverse=True)[:max_anios]
     rutas = []
-    for recurso in listar_recursos():
+    for recurso in recursos:
         url = recurso["url"]
         destino = CARPETA_RAW / url.rsplit("/", 1)[-1]
         if not destino.exists():
             print(f"Descargando {recurso.get('name')} …")
-            with requests.get(url, timeout=300, stream=True) as r:
-                r.raise_for_status()
-                with open(destino, "wb") as f:
-                    for bloque in r.iter_content(1 << 20):
-                        f.write(bloque)
+            try:
+                descargar_archivo(url, destino)
+            except requests.RequestException as error:
+                # Un año que no baja no debe impedir publicar los demás.
+                print(f"AVISO: no se pudo descargar {recurso.get('name')}: {error}")
+                continue
         rutas.append(destino)
     return rutas
 
@@ -165,7 +199,7 @@ def procesar(rutas: list[Path]) -> dict:
 
 
 def ejecutar(sin_descarga: bool = False) -> None:
-    rutas = sorted(CARPETA_RAW.glob("*")) if sin_descarga else descargar()
+    rutas = sorted(r for r in CARPETA_RAW.glob("*") if r.suffix != ".part") if sin_descarga else descargar()
     resultado = procesar(rutas)
     SITE_DATA.mkdir(parents=True, exist_ok=True)
     SALIDA.write_text(json.dumps(resultado, ensure_ascii=False, indent=1), encoding="utf-8")

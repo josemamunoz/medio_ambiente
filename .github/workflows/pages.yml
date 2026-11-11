@@ -31,6 +31,12 @@ jobs:
         run: pytest -q
       - name: Datos de la huella (factores + demo)
         run: python -m pipeline.build
+      - name: Caché de archivos del RETC
+        uses: actions/cache@v4
+        with:
+          path: data/raw/retc
+          key: retc-v1-${{ github.run_id }}
+          restore-keys: retc-v1-
       - name: Observatorio RETC (descarga desde datos.gob.cl)
         # En main, si el portal del Estado falla, el sitio se publica igual sin esta sección.
         # En un PR debe funcionar, para detectar cambios de formato del RETC antes de unir.
