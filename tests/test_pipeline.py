@@ -39,7 +39,7 @@ def test_observatorio_columnas_variables(tmp_path):
     archivo = tmp_path / "retc.csv"
     pd.DataFrame(
         {
-            "Año": [2023, 2023, 2023, 2022],
+            "Año": [2021, 2021, 2021, 2020],
             "Nombre establecimiento": ["Central A", "Central A", "Fundición B", "Central A"],
             "Razón social": ["Gen SA", "Gen SA", "Min SA", "Gen SA"],
             "Región": ["Antofagasta", "Antofagasta", "Atacama", "Antofagasta"],
@@ -50,8 +50,8 @@ def test_observatorio_columnas_variables(tmp_path):
         }
     ).to_csv(archivo, index=False, sep=";")
     res = observatorio.procesar([archivo])
-    assert res["ultimo_anio"] == 2023
-    assert {r["anio"]: r["tco2"] for r in res["por_anio"]} == {2022: 900.0, 2023: 1200.5}
+    assert res["ultimo_anio"] == 2021
+    assert {r["anio"]: r["tco2"] for r in res["por_anio"]} == {2020: 900.0, 2021: 1200.5}
     assert res["por_rubro"][0] == {"nombre": "Energía", "tco2": 1000.5}
 
 
@@ -192,3 +192,18 @@ def test_prefiere_nombre_legible_sobre_codigo():
     mapa = observatorio._mapear_columnas(["año", "contaminante_id", "contaminante", "emision_combustible_primario", "emision_total"])
     assert mapa["contaminante"] == "contaminante"
     assert mapa["toneladas"] == "emision_total"
+
+
+def test_prefiere_emision_retc_validada():
+    mapa = observatorio._mapear_columnas(["año", "contaminante", "emision_total", "emision_retc"])
+    assert mapa["toneladas"] == "emision_retc"
+
+
+def test_anio_excluido_no_se_publica(tmp_path):
+    archivo = tmp_path / "retc.csv"
+    pd.DataFrame(
+        {"Año": [2021, 2022], "Contaminante": ["CO2", "CO2"], "Cantidad toneladas": [10, 999]}
+    ).to_csv(archivo, index=False)
+    res = observatorio.procesar([archivo])
+    assert [r["anio"] for r in res["por_anio"]] == [2021]
+    assert res["anios_excluidos"][0]["anio"] == 2022

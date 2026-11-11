@@ -83,6 +83,15 @@
         <td>${escapar(e.region)}</td><td>${escapar(e.rubro)}</td><td class="num">${fmt(e.tco2, 0)}</td></tr>`)
       .join("");
     $("fuente").textContent = datos.fuente;
+    const excl = datos.anios_excluidos || [];
+    $("excluidos").hidden = excl.length === 0;
+    $("excluidos").replaceChildren(
+      ...excl.flatMap((e) => {
+        const b = document.createElement("strong");
+        b.textContent = `${e.anio} no se muestra. `;
+        return [b, document.createTextNode(e.motivo + " "), document.createElement("br")];
+      })
+    );
   }
 
   alCambiarTema(render);

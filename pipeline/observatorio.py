@@ -31,6 +31,15 @@ CARPETA_RAW = DATA / "raw" / "retc"
 SALIDA = SITE_DATA / "observatorio.json"
 MAX_ANIOS = 6  # cada archivo anual pesa decenas de MB
 
+# Años que no se publican porque sus cifras no son confiables. Desde 2023 los
+# archivos traen "emision_retc" (valor validado por el RETC) y se usa ese; el
+# archivo 2022 no lo trae y su "cantidad_toneladas" incluye declaraciones
+# imposibles (p. ej. hornos de una fundición con varios Mt de CO2 cada uno).
+ANIOS_EXCLUIDOS = {
+    2022: "El archivo 2022 no incluye el valor validado por el RETC y contiene declaraciones "
+    "imposibles; su total (113 Mt) casi duplica al de 2021.",
+}
+
 # Nombre lógico -> patrones posibles en el encabezado (ya normalizado).
 # El RETC ha cambiado nombres de columnas entre años, por eso se buscan por patrón.
 COLUMNAS = {
@@ -41,7 +50,7 @@ COLUMNAS = {
     "comuna": [r"^comuna$", r"^comuna_", r"nombre_comuna", r"commune", r"municipality"],
     "rubro": [r"rubro", r"ciiu.*glosa", r"glosa_ciiu", r"sector", r"actividad", r"industry", r"activity"],
     "contaminante": [r"contaminante", r"pollutant", r"contaminant", r"substance"],
-    "toneladas": [r"cantidad_toneladas", r"toneladas", r"emision_total", r"^emision$", r"emision", r"cantidad", r"tonnes", r"tons", r"quantity", r"amount"],
+    "toneladas": [r"^emision_retc$", r"cantidad_toneladas", r"toneladas", r"emision_total", r"^emision$", r"emision", r"cantidad", r"tonnes", r"tons", r"quantity", r"amount"],
 }
 
 
@@ -223,6 +232,10 @@ def leer_archivo(ruta: Path) -> pd.DataFrame:
         if "emision_retc" in crudo.columns:
             retc = _a_numero(crudo.loc[co2.index, "emision_retc"]).sum() / 1e6
             print(f"  {ruta.name}: suma de emision_retc: {retc:.1f} Mt")
+        for col in ("tipo_dato_retc", "sistema", "origen_data"):
+            if col in crudo.columns:
+                tabla = co2.groupby(crudo.loc[co2.index, col].astype(str))["toneladas"].sum() / 1e6
+                print(f"  {ruta.name}: CO2 por {col} (Mt): {tabla.round(1).to_dict()}")
         tipo = "tipo_fuente" if "tipo_fuente" in crudo.columns else None
         for i, fila in grandes.head(12).iterrows():
             print(
@@ -251,6 +264,8 @@ def procesar(rutas: list[Path]) -> dict:
     df = pd.concat(tablas, ignore_index=True)
     df = df[df["contaminante"].astype(str).map(es_co2)].copy()
     df["anio"] = df["anio"].astype(int)
+    excluidos = {a: m for a, m in ANIOS_EXCLUIDOS.items() if a in set(df["anio"])}
+    df = df[~df["anio"].isin(excluidos)]
     ultimo = int(df["anio"].max())
     actual = df[df["anio"] == ultimo]
 
@@ -268,6 +283,7 @@ def procesar(rutas: list[Path]) -> dict:
     return {
         "fuente": "RETC – Emisiones al aire de fuentes puntuales (MMA), vía datos.gob.cl",
         "ultimo_anio": ultimo,
+        "anios_excluidos": [{"anio": a, "motivo": m} for a, m in sorted(excluidos.items())],
         "por_anio": [{"anio": int(a), "tco2": round(float(t), 1)} for a, t in por_anio.items()],
         "por_region": top("region", 16),
         "por_rubro": top("rubro"),
