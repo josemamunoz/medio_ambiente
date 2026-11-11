@@ -186,3 +186,9 @@ def test_excel_en_ingles_en_segunda_hoja(tmp_path):
 def test_es_co2_en_ingles():
     assert observatorio.es_co2("Carbon dioxide")
     assert not observatorio.es_co2("Carbon monoxide")
+
+
+def test_prefiere_nombre_legible_sobre_codigo():
+    mapa = observatorio._mapear_columnas(["año", "contaminante_id", "contaminante", "emision_combustible_primario", "emision_total"])
+    assert mapa["contaminante"] == "contaminante"
+    assert mapa["toneladas"] == "emision_total"

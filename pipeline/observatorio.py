@@ -41,7 +41,7 @@ COLUMNAS = {
     "comuna": [r"^comuna$", r"^comuna_", r"nombre_comuna", r"commune", r"municipality"],
     "rubro": [r"rubro", r"ciiu.*glosa", r"glosa_ciiu", r"sector", r"actividad", r"industry", r"activity"],
     "contaminante": [r"contaminante", r"pollutant", r"contaminant", r"substance"],
-    "toneladas": [r"cantidad_toneladas", r"toneladas", r"emision", r"cantidad", r"tonnes", r"tons", r"quantity", r"amount"],
+    "toneladas": [r"cantidad_toneladas", r"toneladas", r"emision_total", r"^emision$", r"emision", r"cantidad", r"tonnes", r"tons", r"quantity", r"amount"],
 }
 
 
@@ -52,10 +52,12 @@ def _normalizar(texto: str) -> str:
 
 def _mapear_columnas(columnas: list[str]) -> dict[str, str]:
     normalizadas = {_normalizar(c): c for c in columnas}
+    # Las columnas de código ("contaminante_id") van al final: se prefiere el nombre legible.
+    orden = sorted(normalizadas.items(), key=lambda kv: kv[0].endswith("_id") or kv[0].startswith("id_"))
     mapa = {}
     for logico, patrones in COLUMNAS.items():
         for patron in patrones:
-            hit = next((orig for norm, orig in normalizadas.items() if re.search(patron, norm)), None)
+            hit = next((orig for norm, orig in orden if re.search(patron, norm)), None)
             if hit is not None and hit not in mapa.values():
                 mapa[logico] = hit
                 break
@@ -213,6 +215,8 @@ def leer_archivo(ruta: Path) -> pd.DataFrame:
     )
     if co2.empty:
         print(f"  {ruta.name}: contaminantes más frecuentes: {df['contaminante'].value_counts().head(8).to_dict()}")
+        print(f"  {ruta.name}: todas las columnas: {list(crudo.columns)}")
+        print(f"  {ruta.name}: fila de ejemplo: {crudo.iloc[0].astype(str).str[:30].to_dict()}")
     return df
 
 
