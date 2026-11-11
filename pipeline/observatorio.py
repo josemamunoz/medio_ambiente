@@ -1,0 +1,182 @@
+"""Observatorio: emisiones de CO2 de fuentes puntuales en Chile (RETC, MMA).
+
+Descarga los archivos anuales del dataset "Emisiones al aire de fuentes
+puntuales" publicado en datos.gob.cl, filtra el CO2 y genera agregados por
+año, región, rubro y establecimiento para el dashboard.
+
+Requiere acceso a internet hacia datos.gob.cl y datosretc.mma.gob.cl
+(el GitHub Action lo tiene). Uso:
+    python -m pipeline.observatorio            # descarga + procesa
+    python -m pipeline.observatorio --sin-descarga   # solo procesa data/raw/retc
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import re
+import unicodedata
+from pathlib import Path
+
+import pandas as pd
+import requests
+
+from . import DATA, SITE_DATA
+
+CKAN_API = "https://datos.gob.cl/api/3/action/package_show"
+DATASET = "emisiones-al-aire-de-fuente-puntuales"
+CARPETA_RAW = DATA / "raw" / "retc"
+SALIDA = SITE_DATA / "observatorio.json"
+
+# Nombre lógico -> patrones posibles en el encabezado (ya normalizado).
+# El RETC ha cambiado nombres de columnas entre años, por eso se buscan por patrón.
+COLUMNAS = {
+    "anio": [r"^ano$", r"^anio$", r"^periodo$", r"^ano_"],
+    "establecimiento": [r"nombre_establecimiento", r"^establecimiento", r"nombre_fuente"],
+    "razon_social": [r"razon_social", r"raz_social"],
+    "region": [r"^region$", r"^region_", r"nombre_region"],
+    "comuna": [r"^comuna$", r"^comuna_", r"nombre_comuna"],
+    "rubro": [r"rubro", r"ciiu.*glosa", r"glosa_ciiu", r"sector", r"actividad"],
+    "contaminante": [r"contaminante"],
+    "toneladas": [r"cantidad_toneladas", r"toneladas", r"emision", r"cantidad"],
+}
+
+
+def _normalizar(texto: str) -> str:
+    texto = unicodedata.normalize("NFKD", str(texto)).encode("ascii", "ignore").decode()
+    return re.sub(r"[^a-z0-9]+", "_", texto.lower()).strip("_")
+
+
+def _mapear_columnas(columnas: list[str]) -> dict[str, str]:
+    normalizadas = {_normalizar(c): c for c in columnas}
+    mapa = {}
+    for logico, patrones in COLUMNAS.items():
+        for patron in patrones:
+            hit = next((orig for norm, orig in normalizadas.items() if re.search(patron, norm)), None)
+            if hit is not None and hit not in mapa.values():
+                mapa[logico] = hit
+                break
+    return mapa
+
+
+def listar_recursos() -> list[dict]:
+    resp = requests.get(CKAN_API, params={"id": DATASET}, timeout=60)
+    resp.raise_for_status()
+    recursos = resp.json()["result"]["resources"]
+    return [r for r in recursos if str(r.get("format", "")).lower() in {"csv", "xlsx", "xls"} and r.get("url")]
+
+
+def descargar() -> list[Path]:
+    CARPETA_RAW.mkdir(parents=True, exist_ok=True)
+    rutas = []
+    for recurso in listar_recursos():
+        url = recurso["url"]
+        destino = CARPETA_RAW / url.rsplit("/", 1)[-1]
+        if not destino.exists():
+            print(f"Descargando {recurso.get('name')} …")
+            with requests.get(url, timeout=300, stream=True) as r:
+                r.raise_for_status()
+                with open(destino, "wb") as f:
+                    for bloque in r.iter_content(1 << 20):
+                        f.write(bloque)
+        rutas.append(destino)
+    return rutas
+
+
+def _leer(ruta: Path) -> pd.DataFrame:
+    if ruta.suffix.lower() == ".csv":
+        for enc in ("utf-8", "latin-1"):
+            try:
+                return pd.read_csv(ruta, sep=None, engine="python", encoding=enc)
+            except UnicodeDecodeError:
+                continue
+    return pd.read_excel(ruta)
+
+
+def leer_archivo(ruta: Path) -> pd.DataFrame:
+    crudo = _leer(ruta)
+    mapa = _mapear_columnas(list(crudo.columns))
+    obligatorias = {"anio", "contaminante", "toneladas"}
+    if not obligatorias <= mapa.keys():
+        raise ValueError(
+            f"{ruta.name}: no se reconocen las columnas {sorted(obligatorias - mapa.keys())}. "
+            f"Columnas disponibles: {list(crudo.columns)}. Ajusta COLUMNAS en observatorio.py."
+        )
+    df = crudo[list(mapa.values())].rename(columns={v: k for k, v in mapa.items()})
+    for faltante in COLUMNAS.keys() - mapa.keys():
+        df[faltante] = "Sin dato"
+    df["toneladas"] = pd.to_numeric(
+        df["toneladas"].astype(str).str.replace(",", ".", regex=False), errors="coerce"
+    )
+    df["anio"] = pd.to_numeric(df["anio"], errors="coerce")
+    return df.dropna(subset=["anio", "toneladas"])
+
+
+def es_co2(contaminante: str) -> bool:
+    norm = _normalizar(contaminante)
+    return norm in {"co2", "dioxido_de_carbono", "dioxido_de_carbono_co2"} or (
+        "dioxido_de_carbono" in norm and "mono" not in norm
+    )
+
+
+def procesar(rutas: list[Path]) -> dict:
+    tablas = []
+    for ruta in rutas:
+        try:
+            tablas.append(leer_archivo(ruta))
+        except Exception as error:  # un archivo con formato raro no debe botar todo
+            print(f"AVISO: se omite {ruta.name}: {error}")
+    if not tablas:
+        raise RuntimeError("No se pudo leer ningún archivo del RETC.")
+    df = pd.concat(tablas, ignore_index=True)
+    df = df[df["contaminante"].astype(str).map(es_co2)].copy()
+    df["anio"] = df["anio"].astype(int)
+    ultimo = int(df["anio"].max())
+    actual = df[df["anio"] == ultimo]
+
+    def top(columna: str, n: int = 10) -> list[dict]:
+        serie = actual.groupby(columna)["toneladas"].sum().nlargest(n)
+        return [{"nombre": str(k), "tco2": round(float(v), 1)} for k, v in serie.items()]
+
+    por_anio = df.groupby("anio")["toneladas"].sum()
+    establecimientos = (
+        actual.groupby(["establecimiento", "razon_social", "region", "rubro"])["toneladas"]
+        .sum()
+        .nlargest(15)
+        .reset_index()
+    )
+    return {
+        "fuente": "RETC – Emisiones al aire de fuentes puntuales (MMA), vía datos.gob.cl",
+        "ultimo_anio": ultimo,
+        "por_anio": [{"anio": int(a), "tco2": round(float(t), 1)} for a, t in por_anio.items()],
+        "por_region": top("region", 16),
+        "por_rubro": top("rubro"),
+        "establecimientos": [
+            {
+                "establecimiento": str(r.establecimiento),
+                "razon_social": str(r.razon_social),
+                "region": str(r.region),
+                "rubro": str(r.rubro),
+                "tco2": round(float(r.toneladas), 1),
+            }
+            for r in establecimientos.itertuples()
+        ],
+    }
+
+
+def ejecutar(sin_descarga: bool = False) -> None:
+    rutas = sorted(CARPETA_RAW.glob("*")) if sin_descarga else descargar()
+    resultado = procesar(rutas)
+    SITE_DATA.mkdir(parents=True, exist_ok=True)
+    SALIDA.write_text(json.dumps(resultado, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"Observatorio escrito en {SALIDA} (último año: {resultado['ultimo_anio']})")
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("--sin-descarga", action="store_true", help="usar solo archivos ya presentes en data/raw/retc")
+    ejecutar(parser.parse_args().sin_descarga)
+
+
+if __name__ == "__main__":
+    main()
