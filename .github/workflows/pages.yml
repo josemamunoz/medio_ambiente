@@ -3,6 +3,7 @@ name: Actualizar datos y publicar sitio
 on:
   push:
     branches: [main]
+  pull_request:
   schedule:
     - cron: "17 9 3 * *"   # día 3 de cada mes
   workflow_dispatch:
@@ -13,7 +14,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: pages-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -31,14 +32,16 @@ jobs:
       - name: Datos de la huella (factores + demo)
         run: python -m pipeline.build
       - name: Observatorio RETC (descarga desde datos.gob.cl)
-        # Si el portal del Estado falla, el sitio se publica igual sin esta sección.
-        continue-on-error: true
+        # En main, si el portal del Estado falla, el sitio se publica igual sin esta sección.
+        # En un PR debe funcionar, para detectar cambios de formato del RETC antes de unir.
+        continue-on-error: ${{ github.event_name != 'pull_request' }}
         run: python -m pipeline.observatorio
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
 
   deploy:
+    if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
     environment:
