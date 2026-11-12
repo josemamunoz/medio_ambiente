@@ -6,7 +6,9 @@ sin licencias, publicados gratis en GitHub Pages y actualizados automáticamente
 | Módulo | Qué muestra | Datos |
 |---|---|---|
 | **Huella de carbono corporativa** (`site/huella.html`) | Emisiones de alcance 1, 2 y 3 (GHG Protocol) por mes, sede y fuente. Permite cargar un CSV propio y recalcula en el navegador. | Empresa ficticia de demo + factores de emisión en `data/referencia/` |
-| **Observatorio RETC** (`site/observatorio.html`) | Emisiones de CO₂ de la industria chilena por año, región, rubro y establecimiento. | RETC – *Emisiones al aire de fuentes puntuales* (MMA), vía datos.gob.cl |
+| **Observatorio RETC** (`site/observatorio.html`) | Emisiones de CO₂ de la industria chilena por año, región, rubro y establecimiento; mapa interactivo y foco en Mejillones, Tocopilla y Antofagasta. | RETC – *Emisiones al aire de fuentes puntuales* (MMA), vía datos.gob.cl |
+
+Sitio publicado: **https://josemamunoz.github.io/medio_ambiente/**
 
 ## Para quién
 
@@ -20,13 +22,15 @@ sin licencias, publicados gratis en GitHub Pages y actualizados automáticamente
 pipeline/                  Python: cálculos y descarga de datos
   huella.py                cálculo consumo × factor, por alcance
   demo.py                  genera los consumos de la empresa ficticia
-  observatorio.py          descarga y procesa el RETC
+  observatorio.py          descarga y procesa el RETC (totales, mapa, zona norte)
+  factor_red.py            factor de emisión oficial de la red (CNE)
   build.py                 genera los JSON que lee el sitio
 data/
   referencia/factores_emision.csv   factores de emisión (editar aquí)
+  referencia/factor_red_sen.csv     factor anual oficial de la red eléctrica (CNE)
   demo/consumos_demo.csv            consumos de la empresa demo
   plantilla/plantilla_consumos.csv  formato para cargar datos reales
-site/                      sitio estático (HTML + CSS + JS + ECharts incluido)
+site/                      sitio estático (HTML + CSS + JS; ECharts y Leaflet incluidos)
 tests/                     pruebas con pytest
 .github/workflows/pages.yml  actualiza datos y publica el sitio cada mes
 ```
@@ -58,8 +62,9 @@ Se aceptan archivos separados por coma o por punto y coma (Excel en español).
 
 - **Emisiones = consumo × factor de emisión**, agrupadas por alcance según el GHG Protocol.
 - Los factores de combustibles usan los valores por defecto del IPCC 2006 (solo CO₂; CH₄ y N₂O no se incluyen todavía).
-- **El factor de la red eléctrica (0,30 kgCO₂/kWh) es un valor de demo.** Antes de cualquier reporte real hay que reemplazarlo por el
-  promedio anual del dataset *Factor de Emisión – Promedio Mensual* de la CNE (Energía Abierta).
+- **Electricidad (alcance 2):** factor oficial de la CNE (*Factor de Emisión Mensual SEN*, datos.gob.cl), promediado por año y
+  ponderado por generación. Cada consumo usa el factor de su año (0,26 kgCO₂/kWh en 2023, 0,21 en 2024, 0,25 en 2025).
+  El Action lo actualiza cada mes.
 - Los factores de alcance 3 (vuelos y residuos) son órdenes de magnitud basados en DEFRA/DESNZ; hay que verificar la versión vigente.
 - La empresa de la demo es ficticia.
 - El parser del RETC reconoce las columnas por patrones, porque sus nombres (y hasta el idioma) cambian entre años.
@@ -79,9 +84,9 @@ Resultado (Mt de CO₂ de fuentes puntuales): 2020: 62 · 2021: 67 · 2023: 54 �
 
 ## Próximos pasos
 
-- [ ] Descargar automáticamente el factor de emisión del SEN desde Energía Abierta (CNE).
+- [x] Factor de emisión oficial del SEN (CNE), actualizado automáticamente.
+- [x] Observatorio: mapa de establecimientos y foco en Mejillones, Tocopilla y Antofagasta.
 - [ ] Agregar CH₄ y N₂O a los factores de combustión.
-- [ ] Observatorio: mapa por comuna y foco en Mejillones, Tocopilla y Antofagasta.
 - [ ] Observatorio: impuesto verde por establecimiento.
 - [ ] Huella: metas de reducción y trayectoria hacia carbono neutralidad.
 - [ ] Exportar un reporte en PDF para el cliente.

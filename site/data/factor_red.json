@@ -1,0 +1,69 @@
+{
+ "fuente": "CNE – Factor de Emisión Mensual SEN (datos.gob.cl)",
+ "anios": [
+  {
+   "anio": 2010,
+   "factor": 0.4586
+  },
+  {
+   "anio": 2011,
+   "factor": 0.4744
+  },
+  {
+   "anio": 2012,
+   "factor": 0.4992
+  },
+  {
+   "anio": 2013,
+   "factor": 0.5305
+  },
+  {
+   "anio": 2014,
+   "factor": 0.4714
+  },
+  {
+   "anio": 2015,
+   "factor": 0.4554
+  },
+  {
+   "anio": 2016,
+   "factor": 0.4953
+  },
+  {
+   "anio": 2017,
+   "factor": 0.4499
+  },
+  {
+   "anio": 2018,
+   "factor": 0.4195
+  },
+  {
+   "anio": 2019,
+   "factor": 0.4056
+  },
+  {
+   "anio": 2020,
+   "factor": 0.3833
+  },
+  {
+   "anio": 2021,
+   "factor": 0.42
+  },
+  {
+   "anio": 2022,
+   "factor": 0.3274
+  },
+  {
+   "anio": 2023,
+   "factor": 0.2559
+  },
+  {
+   "anio": 2024,
+   "factor": 0.2131
+  },
+  {
+   "anio": 2025,
+   "factor": 0.2468
+  }
+ ]
+}

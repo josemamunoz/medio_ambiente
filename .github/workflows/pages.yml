@@ -29,6 +29,10 @@ jobs:
       - run: pip install -r requirements.txt
       - name: Tests
         run: pytest -q
+      - name: Factor de emisión oficial de la red (CNE)
+        # Si datos.gob.cl no responde, se usa la copia versionada en data/referencia.
+        continue-on-error: true
+        run: python -m pipeline.factor_red
       - name: Datos de la huella (factores + demo)
         run: python -m pipeline.build
       - name: Caché de archivos del RETC

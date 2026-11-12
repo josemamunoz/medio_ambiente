@@ -40,6 +40,61 @@ MAX_ANIOS = 6  # cada archivo anual pesa decenas de MB
 # son errores de declaración y se excluyen, dejando registro de cada una.
 MAX_T_POR_FUENTE = 4_000_000
 
+# Mapa: establecimientos del último año sobre este umbral (deja fuera miles de
+# fuentes pequeñas y mantiene el JSON liviano).
+MIN_T_MAPA = 1_000
+# Comunas del foco "zona norte" (normalizadas con _normalizar).
+COMUNAS_FOCO = {"mejillones": "Mejillones", "tocopilla": "Tocopilla", "antofagasta": "Antofagasta"}
+# Agrupación de rubros para el color del mapa (máx. 3 + "Otros", por legibilidad).
+GRUPOS_RUBRO = [("termoel", "Termoeléctricas"), ("celulosa", "Celulosa y papel"), ("papel", "Celulosa y papel"), ("miner", "Minería")]
+
+
+def grupo_rubro(rubro: str) -> str:
+    norm = _normalizar(rubro)
+    return next((g for clave, g in GRUPOS_RUBRO if clave in norm), "Otros")
+
+
+def _mapa(actual: pd.DataFrame) -> list[dict]:
+    pts = actual.assign(lat=_a_numero(actual["latitud"]), lon=_a_numero(actual["longitud"]))
+    # Solo coordenadas dentro de Chile (incluida Isla de Pascua).
+    pts = pts[pts["lat"].between(-56.5, -17) & pts["lon"].between(-110, -66)]
+    claves = ["establecimiento", "razon_social", "rubro", "comuna", "region"]
+    g = pts.groupby(claves).agg(tco2=("toneladas", "sum"), lat=("lat", "median"), lon=("lon", "median")).reset_index()
+    g = g[g["tco2"] >= MIN_T_MAPA].sort_values("tco2", ascending=False)
+    return [
+        {
+            "establecimiento": str(r.establecimiento),
+            "razon_social": str(r.razon_social),
+            "rubro": str(r.rubro),
+            "grupo": grupo_rubro(str(r.rubro)),
+            "comuna": str(r.comuna),
+            "region": str(r.region),
+            "lat": round(float(r.lat), 4),
+            "lon": round(float(r.lon), 4),
+            "tco2": round(float(r.tco2), 1),
+        }
+        for r in g.itertuples()
+    ]
+
+
+def _zona_norte(df: pd.DataFrame, ultimo: int) -> dict:
+    foco = df.assign(comuna_foco=df["comuna"].astype(str).map(lambda c: COMUNAS_FOCO.get(_normalizar(c))))
+    foco = foco[foco["comuna_foco"].notna()]
+    tabla = foco.pivot_table(index="anio", columns="comuna_foco", values="toneladas", aggfunc="sum", fill_value=0)
+    actual = foco[foco["anio"] == ultimo]
+    top = actual.groupby(["establecimiento", "comuna_foco", "rubro"])["toneladas"].sum().nlargest(10).reset_index()
+    return {
+        "comunas": list(COMUNAS_FOCO.values()),
+        "por_anio": [
+            {"anio": int(a), **{c: round(float(tabla.at[a, c]), 1) if c in tabla.columns else 0.0 for c in COMUNAS_FOCO.values()}}
+            for a in tabla.index
+        ],
+        "top": [
+            {"establecimiento": str(r.establecimiento), "comuna": str(r.comuna_foco), "rubro": str(r.rubro), "tco2": round(float(r.toneladas), 1)}
+            for r in top.itertuples()
+        ],
+    }
+
 ANIOS_EXCLUIDOS = {
     2022: "El archivo 2022 no incluye el valor validado por el RETC y contiene declaraciones "
     "imposibles; su total (113 Mt) casi duplica al de 2021.",
@@ -54,6 +109,8 @@ COLUMNAS = {
     "region": [r"^region$", r"^region_", r"nombre_region"],
     "comuna": [r"^comuna$", r"^comuna_", r"nombre_comuna", r"commune", r"municipality"],
     "rubro": [r"rubro", r"ciiu.*glosa", r"glosa_ciiu", r"sector", r"actividad", r"industry", r"activity"],
+    "latitud": [r"^latitud", r"^lat$", r"^latitude"],
+    "longitud": [r"^longitud", r"^lon$", r"^lng$", r"^longitude"],
     "contaminante": [r"contaminante", r"pollutant", r"contaminant", r"substance"],
     "toneladas": [r"^emision_retc$", r"cantidad_toneladas", r"toneladas", r"emision_total", r"^emision$", r"emision", r"cantidad", r"tonnes", r"tons", r"quantity", r"amount"],
 }
@@ -298,6 +355,9 @@ def procesar(rutas: list[Path]) -> dict:
         "tope_por_fuente_t": MAX_T_POR_FUENTE,
         "por_anio": [{"anio": int(a), "tco2": round(float(t), 1)} for a, t in por_anio.items()],
         "por_region": top("region", 16),
+        "mapa": _mapa(actual),
+        "min_t_mapa": MIN_T_MAPA,
+        "zona_norte": _zona_norte(df, ultimo),
         "por_rubro": top("rubro"),
         "establecimientos": [
             {

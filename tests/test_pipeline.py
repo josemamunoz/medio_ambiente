@@ -1,7 +1,7 @@
 import pandas as pd
 import pytest
 
-from pipeline import demo, huella, observatorio
+from pipeline import demo, factor_red, huella, observatorio
 
 
 def test_calculo_simple():
@@ -11,7 +11,7 @@ def test_calculo_simple():
     )
     em = huella.calcular_emisiones(consumos, factores)
     diesel = factores.set_index("id").loc["diesel", "factor_kgco2e"]
-    red = factores.set_index("id").loc["electricidad_sen", "factor_kgco2e"]
+    red = factor_red.factor_para(2025, factor_red.cargar())
     assert em["tco2e"].sum() == pytest.approx((1000 * diesel + 10000 * red) / 1000)
     assert set(em["alcance"]) == {1, 2}
 
@@ -222,3 +222,65 @@ def test_fuente_implausible_se_excluye_y_registra(tmp_path):
     res = observatorio.procesar([archivo])
     assert res["por_anio"] == [{"anio": 2024, "tco2": 2_000_000.0}]
     assert res["fuentes_excluidas"][0]["establecimiento"] == "Panadería"
+
+
+def test_factor_red_anual_ponderado(tmp_path):
+    archivo = tmp_path / "fe.csv"
+    filas = ["anio,mes,sistema,factor_emision_avg,generacion_bruta_gwh,fecha_act"]
+    for mes in range(1, 13):
+        filas.append(f'2017,{mes},SIC,"0,2","300",2026-01-01')
+        filas.append(f'2017,{mes},SING,"0,8","100",2026-01-01')
+    filas.append('2018,1,SEN,"0,4","400",2026-01-01')  # año incompleto: se descarta
+    archivo.write_text("\n".join(filas), encoding="utf-8-sig")
+    tabla = factor_red.anual(archivo)
+    assert tabla.to_dict(orient="records") == [{"anio": 2017, "factor_kgco2_kwh": 0.35}]
+
+
+def test_factor_red_usa_ultimo_anio_disponible():
+    tabla = {2023: 0.26, 2024: 0.21}
+    assert factor_red.factor_para(2024, tabla) == 0.21
+    assert factor_red.factor_para(2026, tabla) == 0.21
+    assert factor_red.factor_para(2010, tabla) == 0.26
+
+
+def test_electricidad_usa_factor_del_anio():
+    red = factor_red.cargar()
+    consumos = pd.DataFrame(
+        {"fecha": ["2023-05", "2024-05"], "sede": ["A", "A"], "fuente": ["electricidad_sen"] * 2, "cantidad": [1000, 1000]}
+    )
+    em = huella.calcular_emisiones(consumos, huella.cargar_factores())
+    assert em["tco2e"].tolist() == pytest.approx([red[2023], red[2024]])
+
+
+def test_mapa_y_zona_norte(tmp_path):
+    archivo = tmp_path / "retc.csv"
+    pd.DataFrame(
+        {
+            "Año": [2024, 2024, 2024, 2023, 2024],
+            "Nombre establecimiento": ["Central Angamos", "Central Angamos", "Panadería", "Central Angamos", "Planta sin coordenadas"],
+            "Comuna": ["Mejillones", "Mejillones", "Santiago", "Mejillones", "Tocopilla"],
+            "Rubro": ["Termoeléctricas"] * 2 + ["Otras industrias manufactureras", "Termoeléctricas", "Minería"],
+            "Latitud": ["-23,0686", "-23,0686", "-33,45", "-23,0686", ""],
+            "Longitud": ["-70,3688", "-70,3688", "-70,66", "-70,3688", ""],
+            "Contaminante": ["CO2"] * 5,
+            "Cantidad toneladas": ["1500000", "500000", "200", "2100000", "5000"],
+        }
+    ).to_csv(archivo, index=False, sep=";")
+    res = observatorio.procesar([archivo])
+    # El mapa suma por establecimiento, exige coordenadas válidas y el umbral mínimo.
+    assert len(res["mapa"]) == 1
+    punto = res["mapa"][0]
+    assert punto["tco2"] == 2_000_000.0 and punto["grupo"] == "Termoeléctricas"
+    assert (punto["lat"], punto["lon"]) == (-23.0686, -70.3688)
+    # La zona norte incluye todos los años y a Tocopilla aunque no tenga coordenadas.
+    zona = {r["anio"]: r for r in res["zona_norte"]["por_anio"]}
+    assert zona[2023]["Mejillones"] == 2_100_000.0
+    assert zona[2024]["Tocopilla"] == 5000.0
+    assert res["zona_norte"]["top"][0]["establecimiento"] == "Central Angamos"
+
+
+def test_grupo_rubro():
+    assert observatorio.grupo_rubro("Termoeléctricas") == "Termoeléctricas"
+    assert observatorio.grupo_rubro("Industria del papel y celulosa") == "Celulosa y papel"
+    assert observatorio.grupo_rubro("Minería") == "Minería"
+    assert observatorio.grupo_rubro("Pesca y acuicultura") == "Otros"

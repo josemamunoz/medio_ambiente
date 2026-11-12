@@ -55,9 +55,9 @@
   "alcance": 2,
   "categoria": "Electricidad comprada",
   "unidad": "kWh",
-  "factor_kgco2e": 0.3,
-  "fuente": "VALOR DE DEMO. Reemplazar por el promedio anual del dataset 'Factor de Emisión - Promedio Mensual' (CNE, Energía Abierta).",
-  "estado": "reemplazar"
+  "factor_kgco2e": 0.2468,
+  "fuente": "CNE, Factor de Emisión Mensual SEN (datos.gob.cl): promedio anual ponderado por generación. Se aplica el factor del año de cada consumo (ver factor_red_sen.csv); aquí, el último año.",
+  "estado": "oficial"
  },
  {
   "id": "vuelos_nacionales",
