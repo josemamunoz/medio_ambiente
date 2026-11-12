@@ -15,10 +15,11 @@ from pathlib import Path
 
 import pandas as pd
 
-from . import DATA
+from . import DATA, factor_red
 
 COLUMNAS_CONSUMO = ["fecha", "sede", "fuente", "cantidad"]
 ARCHIVO_FACTORES = DATA / "referencia" / "factores_emision.csv"
+FUENTE_RED = "electricidad_sen"
 
 
 def cargar_factores(ruta: Path = ARCHIVO_FACTORES) -> pd.DataFrame:
@@ -50,8 +51,12 @@ def calcular_emisiones(consumos: pd.DataFrame, factores: pd.DataFrame) -> pd.Dat
         right_on="id",
         how="left",
     ).drop(columns="id")
-    df["tco2e"] = df["cantidad"] * df["factor_kgco2e"] / 1000
     df["anio"] = df["fecha"].str[:4].astype(int)
+    # La electricidad usa el factor oficial de la CNE del año de cada consumo.
+    red = factor_red.cargar()
+    es_red = df["fuente"] == FUENTE_RED
+    df.loc[es_red, "factor_kgco2e"] = df.loc[es_red, "anio"].map(lambda a: factor_red.factor_para(a, red))
+    df["tco2e"] = df["cantidad"] * df["factor_kgco2e"] / 1000
     return df
 
 

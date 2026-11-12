@@ -8,29 +8,47 @@
   const ALCANCES = [1, 2, 3];
   const colorAlcance = (a) => css(`--series-${a}`);
 
-  const [factoresLista, demo] = await Promise.all([
+  const [factoresLista, demo, red] = await Promise.all([
     fetch("data/factores.json").then((r) => r.json()),
     fetch("data/demo.json").then((r) => r.json()),
+    fetch("data/factor_red.json").then((r) => r.json()),
   ]);
   const factores = Object.fromEntries(factoresLista.map((f) => [f.id, f]));
+  // Electricidad: factor oficial de la CNE del año del consumo (o el último publicado).
+  const FUENTE_RED = "electricidad_sen";
+  const redPorAnio = Object.fromEntries(red.anios.map((r) => [r.anio, r.factor]));
+  const aniosRed = red.anios.map((r) => r.anio);
+  function factorDe(fuente, anio) {
+    if (fuente !== FUENTE_RED) return factores[fuente].factor_kgco2e;
+    if (anio in redPorAnio) return redPorAnio[anio];
+    const previos = aniosRed.filter((a) => a <= anio);
+    return redPorAnio[previos.length ? Math.max(...previos) : Math.min(...aniosRed)];
+  }
 
   const estado = { empresa: demo.empresa, filas: [], anio: null, sede: "Todas" };
 
-  const graficos = { mensual: grafico("g-mensual"), anual: grafico("g-anual"), fuentes: grafico("g-fuentes") };
+  const graficos = {
+    mensual: grafico("g-mensual"),
+    anual: grafico("g-anual"),
+    fuentes: grafico("g-fuentes"),
+    red: grafico("g-red"),
+  };
 
   // ---------- Datos ----------
   function enriquecer(consumos) {
     return consumos.map((c) => {
       const f = factores[c.fuente];
+      const anio = Number(c.fecha.slice(0, 4));
+      const factor = factorDe(c.fuente, anio);
       return {
         ...c,
-        anio: Number(c.fecha.slice(0, 4)),
+        anio,
         mes: Number(c.fecha.slice(5, 7)),
         alcance: f.alcance,
         nombre: f.nombre,
         unidad: f.unidad,
-        factor: f.factor_kgco2e,
-        tco2e: (c.cantidad * f.factor_kgco2e) / 1000,
+        factor,
+        tco2e: (c.cantidad * factor) / 1000,
       };
     });
   }
@@ -77,6 +95,38 @@
     renderMensual(delAnio);
     renderAnual(filas);
     renderFuentes(delAnio, total);
+    renderRed();
+  }
+
+  function renderRed() {
+    const b = base();
+    const color = css("--series-2");
+    const ultimo = red.anios[red.anios.length - 1];
+    graficos.red.setOption(
+      {
+        textStyle: b.textStyle, grid: { ...b.grid, top: 24, right: 24 },
+        tooltip: {
+          ...b.tooltip, trigger: "axis", axisPointer: { type: "line", lineStyle: { color: css("--baseline") } },
+          formatter: (ps) => `<strong>${ps[0].axisValue}</strong><br>${fmt(ps[0].value, 3)} kgCO₂/kWh`,
+        },
+        xAxis: { type: "category", data: red.anios.map((r) => String(r.anio)), boundaryGap: false, ...b.ejeCategoria },
+        yAxis: { type: "value", min: 0, ...b.ejeValor, axisLabel: { ...b.ejeValor.axisLabel, formatter: (v) => fmt(v, 1) } },
+        series: [{
+          type: "line",
+          data: red.anios.map((r) => r.factor),
+          symbol: "circle", symbolSize: 6, showSymbol: false,
+          lineStyle: { width: 2, color },
+          itemStyle: { color },
+          areaStyle: { color, opacity: 0.08 },
+          markPoint: {
+            symbol: "circle", symbolSize: 9, itemStyle: { color, borderColor: css("--surface"), borderWidth: 2 },
+            label: { show: true, position: "top", color: css("--text-secondary"), formatter: () => fmt(ultimo.factor, 2) },
+            data: [{ coord: [String(ultimo.anio), ultimo.factor] }],
+          },
+        }],
+      },
+      true
+    );
   }
 
   function renderMensual(delAnio) {
@@ -138,10 +188,11 @@
     const b = base();
     const agrupado = {};
     for (const f of delAnio) {
-      const g = (agrupado[f.fuente] ??= { nombre: f.nombre, alcance: f.alcance, unidad: f.unidad, factor: f.factor, cantidad: 0, tco2e: 0 });
+      const g = (agrupado[f.fuente] ??= { nombre: f.nombre, alcance: f.alcance, unidad: f.unidad, cantidad: 0, tco2e: 0 });
       g.cantidad += f.cantidad;
       g.tco2e += f.tco2e;
     }
+    for (const g of Object.values(agrupado)) g.factor = g.cantidad ? (g.tco2e * 1000) / g.cantidad : 0;
     const lista = Object.values(agrupado).sort((x, y) => y.tco2e - x.tco2e);
     const asc = [...lista].reverse();
 

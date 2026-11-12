@@ -16,7 +16,106 @@
   $("contenido").classList.remove("oculto");
 
   const M = 1e6;
-  const graficos = { anios: grafico("g-anios"), region: grafico("g-region"), rubro: grafico("g-rubro") };
+  const graficos = { anios: grafico("g-anios"), region: grafico("g-region"), rubro: grafico("g-rubro"), norte: grafico("g-norte") };
+
+  // ---------- Mapa (Leaflet) ----------
+  const GRUPOS = [
+    { nombre: "Termoeléctricas", color: () => css("--series-1") },
+    { nombre: "Celulosa y papel", color: () => css("--series-2") },
+    { nombre: "Minería", color: () => css("--series-3") },
+    { nombre: "Otros", color: () => css("--axis-muted") },
+  ];
+  const colorGrupo = (g) => (GRUPOS.find((x) => x.nombre === g) || GRUPOS[3]).color();
+  const ZONAS = {
+    chile: { bounds: [[-56, -76], [-17.5, -66]] },
+    "antofagasta-region": { centro: [-23.4, -69.9], zoom: 7 },
+    mejillones: { centro: [-23.09, -70.42], zoom: 12 },
+    tocopilla: { centro: [-22.09, -70.2], zoom: 12 },
+    antofagasta: { centro: [-23.62, -70.39], zoom: 11 },
+  };
+  let mapa = null, capaBase = null, capaPuntos = null;
+
+  function temaOscuro() {
+    const t = document.documentElement.dataset.theme;
+    return t ? t === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  }
+
+  function renderMapa() {
+    const puntos = datos.mapa || [];
+    if (!window.L || !puntos.length) {
+      $("mapa").textContent = "No hay coordenadas disponibles para dibujar el mapa.";
+      return;
+    }
+    if (!mapa) {
+      mapa = L.map("mapa", { scrollWheelZoom: false, zoomSnap: 0.5 });
+      mapa.fitBounds(ZONAS.chile.bounds);
+      document.querySelectorAll(".mapa-controles .boton").forEach((b) =>
+        b.addEventListener("click", () => {
+          document.querySelectorAll(".mapa-controles .boton").forEach((x) => x.classList.toggle("activo", x === b));
+          const z = ZONAS[b.dataset.zona];
+          z.bounds ? mapa.flyToBounds(z.bounds, { duration: 0.8 }) : mapa.flyTo(z.centro, z.zoom, { duration: 0.8 });
+        })
+      );
+    }
+    if (capaBase) capaBase.remove();
+    capaBase = L.tileLayer(
+      `https://{s}.basemaps.cartocdn.com/${temaOscuro() ? "dark_all" : "light_all"}/{z}/{x}/{y}{r}.png`,
+      { attribution: "© OpenStreetMap contributors © CARTO", subdomains: "abcd", maxZoom: 18 }
+    ).addTo(mapa);
+
+    if (capaPuntos) capaPuntos.remove();
+    const max = puntos[0].tco2;
+    const borde = css("--surface");
+    capaPuntos = L.layerGroup(
+      // De mayor a menor, para que los círculos chicos queden encima y se puedan tocar.
+      puntos.map((p) =>
+        L.circleMarker([p.lat, p.lon], {
+          radius: Math.max(3, 22 * Math.sqrt(p.tco2 / max)),
+          color: borde, weight: 1, fillColor: colorGrupo(p.grupo), fillOpacity: 0.75,
+        }).bindPopup(
+          `<strong>${escapar(p.establecimiento)}</strong><br>${escapar(p.razon_social)}<br>` +
+          `${escapar(p.rubro)} · ${escapar(p.comuna)}<br><strong>${fmt(p.tco2, 0)} tCO₂</strong> en ${datos.ultimo_anio}`
+        )
+      )
+    ).addTo(mapa);
+
+    $("mapa-nota").textContent =
+      `${fmt(puntos.length, 0)} establecimientos con más de ${fmt(datos.min_t_mapa || 0, 0)} tCO₂ en ${datos.ultimo_anio}. ` +
+      "El tamaño del círculo es proporcional a sus emisiones; toca uno para ver el detalle.";
+    $("mapa-leyenda").innerHTML = GRUPOS.map(
+      (g) => `<span><span class="punto" style="background:${g.color()}"></span>${g.nombre}</span>`
+    ).join("");
+  }
+
+  // ---------- Foco zona norte ----------
+  function renderNorte() {
+    const z = datos.zona_norte;
+    if (!z) return;
+    const b = base();
+    const surface = css("--surface");
+    graficos.norte.setOption(
+      {
+        textStyle: b.textStyle, grid: { ...b.grid, top: 16 },
+        tooltip: {
+          ...b.tooltip, trigger: "axis", axisPointer: { type: "shadow" },
+          formatter: (ps) => `<strong>${ps[0].axisValue}</strong><br>` +
+            ps.map((p) => `${p.marker}${p.seriesName}: ${fmt(p.value, 2)} Mt`).join("<br>"),
+        },
+        xAxis: { type: "category", data: z.por_anio.map((r) => String(r.anio)), ...b.ejeCategoria },
+        yAxis: { type: "value", ...b.ejeValor, axisLabel: { ...b.ejeValor.axisLabel, formatter: (v) => fmt(v, 1) } },
+        series: z.comunas.map((c, i) => ({
+          name: c, type: "bar", barMaxWidth: 18, barGap: "10%",
+          itemStyle: { color: css(`--series-${i + 1}`), borderColor: surface, borderWidth: 1, borderRadius: [4, 4, 0, 0] },
+          data: z.por_anio.map((r) => r[c] / M),
+        })),
+      },
+      true
+    );
+    $("tabla-norte").innerHTML = z.top
+      .map((e, i) => `<tr><td>${i + 1}</td><td>${escapar(e.establecimiento)}</td><td>${escapar(e.comuna)}</td>
+        <td>${escapar(e.rubro)}</td><td class="num">${fmt(e.tco2, 0)}</td></tr>`)
+      .join("");
+  }
 
   function kpis() {
     const ult = datos.por_anio.at(-1);
@@ -103,6 +202,8 @@
     );
   }
 
-  alCambiarTema(render);
+  alCambiarTema(() => { render(); renderNorte(); renderMapa(); });
   render();
+  renderNorte();
+  renderMapa();
 })();

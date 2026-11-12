@@ -81,6 +81,11 @@
         <div id="g-fuentes" class="grafico" role="img" aria-label="Barras horizontales de emisiones por fuente"></div>
       </article>
       <article class="tarjeta c-12">
+        <h2>Factor de emisión de la red eléctrica (SEN)</h2>
+        <p class="nota">kgCO₂ por kWh, promedio anual ponderado por generación · Fuente: CNE. La caída refleja el retiro de centrales a carbón y la entrada de energía solar y eólica.</p>
+        <div id="g-red" class="grafico" role="img" aria-label="Línea del factor de emisión anual de la red eléctrica chilena"></div>
+      </article>
+      <article class="tarjeta c-12">
         <h2>Detalle por fuente</h2>
         <div class="tabla-envoltura">
           <table>
@@ -96,9 +101,10 @@
 
     <div class="aviso">
       <strong>Metodología.</strong> Emisiones = consumo × factor de emisión, agrupadas en alcances según el GHG Protocol.
-      Los factores (en <a href="https://github.com/josemamunoz/medio_ambiente/blob/main/data/referencia/factores_emision.csv">factores_emision.csv</a>)
-      son <em>referenciales</em>: los de combustibles usan valores por defecto del IPCC 2006 (solo CO₂). El factor de la red eléctrica es un valor de demo
-      que debe reemplazarse por el publicado por la CNE en Energía Abierta antes de hacer un reporte oficial.
+      La electricidad usa el <strong>factor oficial de la CNE</strong> del año de cada consumo
+      (<a href="https://github.com/josemamunoz/medio_ambiente/blob/main/data/referencia/factor_red_sen.csv">factor_red_sen.csv</a>, actualizado cada mes).
+      Los demás factores (<a href="https://github.com/josemamunoz/medio_ambiente/blob/main/data/referencia/factores_emision.csv">factores_emision.csv</a>)
+      son referenciales: combustibles con valores por defecto del IPCC 2006 (solo CO₂) y alcance 3 con órdenes de magnitud DEFRA.
       Los datos de la demo corresponden a una empresa ficticia.
     </div>
   </main>

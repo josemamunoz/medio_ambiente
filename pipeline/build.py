@@ -9,7 +9,7 @@ from __future__ import annotations
 import argparse
 import json
 
-from . import SITE_DATA, demo, huella
+from . import SITE_DATA, demo, factor_red, huella
 
 
 def escribir_json(nombre: str, contenido) -> None:
@@ -31,6 +31,11 @@ def main() -> None:
 
     print("Escribiendo datos del sitio:")
     escribir_json("factores.json", factores.to_dict(orient="records"))
+    red = factor_red.cargar()
+    escribir_json(
+        "factor_red.json",
+        {"fuente": factor_red.FUENTE, "anios": [{"anio": a, "factor": f} for a, f in sorted(red.items())]},
+    )
     escribir_json("demo.json", {"empresa": demo.EMPRESA, "consumos": consumos.to_dict(orient="records")})
 
     if args.observatorio:

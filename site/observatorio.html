@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Observatorio RETC</title>
   <meta name="description" content="Emisiones de CO2 de fuentes puntuales en Chile según el RETC del Ministerio del Medio Ambiente.">
+  <link rel="stylesheet" href="assets/vendor/leaflet/leaflet.css">
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
@@ -56,6 +57,36 @@
           <p class="nota">Millones de toneladas de CO₂, todas las fuentes puntuales declaradas</p>
           <div id="g-anios" class="grafico" role="img" aria-label="Barras de emisiones totales de CO2 por año"></div>
         </article>
+        <article class="tarjeta c-12">
+          <h2>Mapa de emisiones de CO₂</h2>
+          <p class="nota" id="mapa-nota">Establecimientos del último año; el tamaño del círculo es proporcional a sus emisiones.</p>
+          <div class="mapa-controles" role="group" aria-label="Acercar el mapa a una zona">
+            <button type="button" class="boton activo" data-zona="chile">Chile</button>
+            <button type="button" class="boton" data-zona="antofagasta-region">Región de Antofagasta</button>
+            <button type="button" class="boton" data-zona="mejillones">Mejillones</button>
+            <button type="button" class="boton" data-zona="tocopilla">Tocopilla</button>
+            <button type="button" class="boton" data-zona="antofagasta">Antofagasta</button>
+          </div>
+          <div class="leyenda" id="mapa-leyenda"></div>
+          <div id="mapa" class="mapa" role="region" aria-label="Mapa de establecimientos emisores de CO2"></div>
+        </article>
+        <article class="tarjeta c-12">
+          <h2>Foco: Mejillones, Tocopilla y Antofagasta</h2>
+          <p class="nota">Millones de tCO₂ por año en las tres comunas del polo industrial y energético del norte.</p>
+          <div class="leyenda">
+            <span><span class="punto" style="background: var(--series-1)"></span>Mejillones</span>
+            <span><span class="punto" style="background: var(--series-2)"></span>Tocopilla</span>
+            <span><span class="punto" style="background: var(--series-3)"></span>Antofagasta</span>
+          </div>
+          <div id="g-norte" class="grafico" role="img" aria-label="Barras agrupadas de emisiones por año en Mejillones, Tocopilla y Antofagasta"></div>
+          <h2 style="margin-top: 16px">Principales emisores de la zona</h2>
+          <div class="tabla-envoltura">
+            <table>
+              <thead><tr><th>#</th><th>Establecimiento</th><th>Comuna</th><th>Rubro</th><th class="num">tCO₂</th></tr></thead>
+              <tbody id="tabla-norte"></tbody>
+            </table>
+          </div>
+        </article>
         <article class="tarjeta c-6">
           <h2>Por región</h2>
           <p class="nota">Millones de tCO₂, último año disponible</p>
@@ -96,6 +127,7 @@
   <footer>Proyecto de portafolio · Python + HTML, sin licencias de BI</footer>
 
   <script src="assets/vendor/echarts.min.js"></script>
+  <script src="assets/vendor/leaflet/leaflet.js"></script>
   <script src="assets/js/comun.js"></script>
   <script src="assets/js/observatorio.js"></script>
 </body>
